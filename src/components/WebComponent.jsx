@@ -3,7 +3,7 @@ import COMPONENTS from '@sethealth/core/dist/docs';
 
 // const MarkdownBlock = CompLibrary.MarkdownBlock;
 
-export const WebComponent = ({tag}) => {
+const WebComponent = ({tag}) => {
   const cmp = COMPONENTS.components.find(c => c.tag === tag);
   return (
     <>
@@ -76,3 +76,5 @@ export const WebComponent = ({tag}) => {
     </>
   );
 }
+
+export default WebComponent;
