@@ -1,6 +1,6 @@
 ---
 id: storage
-title: Storage
+sidebar_label: Storage
+title: Storage Module
 ---
 
-# Storage Module

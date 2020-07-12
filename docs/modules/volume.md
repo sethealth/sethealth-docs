@@ -1,6 +1,6 @@
 ---
 id: volume
-title: Volume
+sidebar_label: Volume
+title: Volume Module
 ---
 
-# Volume Module

@@ -41,7 +41,7 @@ module.exports = {
           homePageId: 'introduction/getting-started',
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
-            'https://github.com/sethealth/sethealth-docs/edit/master/website/',
+            'https://github.com/sethealth/sethealth-docs/edit/master/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

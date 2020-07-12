@@ -1,6 +1,6 @@
 ---
 id: workspace
-title: Workspace
+sidebar_label: Workspace
+title: Workspace Module
 ---
 
-# Workspace Module

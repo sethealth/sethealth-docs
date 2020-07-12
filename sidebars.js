@@ -2,7 +2,6 @@ module.exports = {
   someSidebar: {
     Introduction: [
       'introduction/getting-started',
-      'introduction/my-first-app',
       'introduction/browser-support',
       'introduction/faq',
     ],

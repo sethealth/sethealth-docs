@@ -1,6 +1,6 @@
 ---
 id: misc
-title: Misc
+sidebar_label: Misc
+title: Misc Module
 ---
 
-# Misc Module

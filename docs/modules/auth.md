@@ -1,6 +1,5 @@
 ---
 id: auth
-title: Auth
+sidebar_label: Auth
+title: Auth Module
 ---
-
-# Auth Module

@@ -1,6 +1,6 @@
 ---
 id: geometry
-title: Geometry
+sidebar_label: Geometry
+title: Geometry Module
 ---
 
-# Geometry Module

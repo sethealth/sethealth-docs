@@ -1,0 +1,31 @@
+---
+id: getting-started
+title: Getting Started
+---
+
+Sethealth is a toolkit that allows developers write healthcare software easier. The services and SDK provided allows you to focus into building a great product, without having to worry about handling all the different medical formats and protocols, making sure data is correctly anonymized and safely encrypted for storage, visualizating, annotating, measuring...
+
+1. Today, the access of Sethealth SDK is only [under invitation](https://sethealth.typeform.com/to/hOvMvs).
+
+2. Install the Sethealth SDK:
+
+```bash
+npm install @sethealth/core
+```
+
+3. Login into the [Sethealth Dashboard](https://dashboard.set.health)
+
+4. Create a new API key with your deployment domain:
+
+![Create API key](/static/docs/create-api-key.png)
+
+5. Initalize with the API key
+
+```js
+import * as sethealth from '@sethealth/core';
+
+async function init() {
+    const API_KEY = "YOUR API KEY";
+    await sethealth.initialize(API_KEY);
+}
+```
