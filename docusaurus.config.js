@@ -9,6 +9,7 @@ module.exports = {
   themeConfig: {
     navbar: {
       title: 'Sethealth',
+      hideOnScroll: true,
       logo: {
         href: 'https://set.health',
         alt: 'Sethealth Logo',

@@ -11,24 +11,66 @@ module.exports = {
       'modules/geometry',
       'modules/workspace',
       'modules/storage',
-      'modules/misc',
+      'modules/utils',
     ],
     Components: [
-      'components/set-3d-volumetric',
-      'components/set-3d-geometry',
-      'components/set-browser',
-      'components/set-color',
-      'components/set-colormap',
-      'components/set-file-loader',
-      'components/set-geometry-panel',
-      'components/set-icon',
-      'components/set-layers',
-      'components/set-panel',
-      'components/set-progress-bar',
-      'components/set-range',
-      'components/set-select',
-      'components/set-toolbar',
-      'components/set-view',
+      {
+        type: 'category',
+        label: 'Data loading',
+        collapsed: false,
+        items: [
+          'components/set-browser',
+          'components/set-file-loader',
+        ]
+      },
+      {
+        type: 'category',
+        label: 'Views',
+        collapsed: false,
+        items: [
+          'components/set-view-volumetric',
+          'components/set-view-geometry',
+          'components/set-view-slices',
+        ]
+      },
+      {
+        type: 'category',
+        label: 'Controls',
+        collapsed: false,
+        items: [
+          'components/set-control-colormap',
+          'components/set-control-toolbar',
+          'components/set-control-models',
+        ]
+      },
+      {
+        type: 'category',
+        label: 'Panels',
+        collapsed: false,
+        items: [
+          'components/set-grid-panel',
+          'components/set-pane',
+        ]
+      },
+      {
+        type: 'category',
+        label: 'Inputs',
+        collapsed: true,
+        items: [
+          'components/set-input-color',
+          'components/set-input-range',
+          'components/set-input-select',
+        ]
+      },
+      {
+        type: 'category',
+        label: 'Misc',
+        collapsed: true,
+        items: [
+          'components/set-progress-bar',
+          'components/set-icon',
+        ]
+      },
     ]
   },
 };
