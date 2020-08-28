@@ -1,0 +1,86 @@
+---
+id: architecture
+title: Architecture
+---
+
+Sethealth SDK is split into different modules, all of the working together, but separed by different functionaly.
+
+
+
+## `sethealth.auth`
+
+The `auth` module exposes the `setAccessToken()` method, required in order for sethealth to connect with the sethealth server and provide the storage, and any on-cloud services.
+
+You should always provide a valid access token if your applications expects to use any of this services.
+
+Please [check out the "auth" docs]() for further details about how to obtain a valid access token for testing and production.
+
+## `sethealth.volume`
+
+The `volume` module is the core of the medical imaging parsing, processing and serialization. This module mainly exposes a set of different methods to import medical data. Supporting dicom, nifty, nrrd, raw and PNG sets.
+
+The term "volume" is used as a generalization of multidimensional images. For example, an single radiography can be represented by a volume of depth=1, while a computed tomography can only be represented by a N-stack of images, there the term "volume".
+
+Please [check out the "volume" docs]() for further details about how to load, and work with medical images.
+
+This module does not deal with any kind of UI of visualiazation, continue with the `workspace` module for UI/visualization use cases.
+
+## `sethealth.workspace`
+
+This module allows to create and serialize workspaces. A workspace is a reactive state that references a previously imported volume. Once a workspace is created, it's passed down to any UI component that supports this property. 
+
+All UI components using the same workspace will share the same `volume` and the same state, such as the active [mouse tool](), the current [window/level](), geometry, annotations.
+
+```jsx
+const [volume] = await sethealth.volume.importFromSource(...);
+const workspace = await sethealth.workspace.create(volume);
+
+...
+
+<set-view-slices workspace={workspace}/>
+<set-view-volumetric workspace={workspace}/>
+
+...
+```
+
+In some way, you can see a workspace as a extra layer of lightweight metadata that is not part of the original volume but it's useful for visualization purposes.
+
+- Geometry
+- Anotations
+- Measurements
+- Segmentations
+- Image settings like window/level (contrast/brithness)
+- Visible slice
+...
+
+Even if you don't need this extra layer of metadata for your app, a workspace is always required in order to visualize a "volume" in any of the UI components of sethealth.
+
+Please [checkout the workspace docs]() for further information.
+
+## `sethealth.geometry`
+
+Geometry visualization is built-in in sethealth, using the MIT open source project `three.js`. The `geometry` module allows developers to import external `.stl` files as well as generate new 3D meshes based on an existing volume.
+
+Once a new geometry is loaded, it can be attached to an existing `workspace`, this way a geometry can be rendered under the context of a volume.
+
+Please [check out the geometry docs]() for further information.
+
+
+## `sethealth.storage`
+
+This module allows developers to upload albitrary payload of data to the sethealth, all end-to-end encrypted.
+Sethealth server and staff will never be able to see the content of the uploaded payload.
+
+Most of the times, developers will not need to use this module directly, since storage API are already deeply integrated into the `volume`, `workspace` and `geometry` modules, which provides better API ergonomic to safely upload medical data.
+
+
+## `sethealth.dataset`
+
+This module allows to append data to existing datasets (previously created in the dashboard).
+A dataset is a collection of assets and metadata, grouped by cases and studies. Datasets allows clients to easily monitor the amount of data collected and batch download it when required.
+
+A common use case for datasets is to append logical collections of imagens and/or data for later machine learning use cases.
+
+Please checkout the dataset docs for further information.
+
+

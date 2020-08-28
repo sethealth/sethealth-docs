@@ -3,6 +3,7 @@ module.exports = {
     Introduction: [
       'introduction/getting-started',
       'introduction/browser-support',
+      'introduction/architecture',
       'introduction/faq',
     ],
     Modules: [

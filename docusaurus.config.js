@@ -15,7 +15,7 @@ module.exports = {
         alt: 'Sethealth Logo',
         src: 'img/logo-light.svg',
       },
-      links: [
+      items: [
         {
           to: 'docs/',
           activeBasePath: 'docs',
