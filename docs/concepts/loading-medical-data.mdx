@@ -1,0 +1,18 @@
+---
+id: loading-medical-data
+title: Loading Medical Data
+---
+
+The component you should use to load your data is `<SetFileLoader>`
+
+```html
+<SetFileLoader onSetMedLoad="{this.onMedLoad}" type="med"></SetFileLoader>
+```
+
+It sends an event, in which you can pick up the handler for your medical data
+
+```ts
+private async onMedLoad(ev: CustomEvent<FileLoadDetail<MedHandler>>) {
+    const medHandlers = ev.detail.items;
+}
+```

@@ -1,77 +1,69 @@
 module.exports = {
   someSidebar: {
     Introduction: [
-      'introduction/getting-started',
-      'introduction/browser-support',
-      'introduction/architecture',
-      'introduction/faq',
+      "introduction/getting-started",
+      "introduction/browser-support",
+      "introduction/architecture",
+      "introduction/faq",
     ],
+    "Main Concepts": ["concepts/loading-medical-data"],
     Modules: [
-      'modules/auth',
-      'modules/volume',
-      'modules/geometry',
-      'modules/workspace',
-      'modules/storage',
-      'modules/utils',
+      "modules/auth",
+      "modules/volume",
+      "modules/geometry",
+      "modules/workspace",
+      "modules/storage",
+      "modules/utils",
     ],
     Components: [
       {
-        type: 'category',
-        label: 'Data loading',
+        type: "category",
+        label: "Data loading",
         collapsed: false,
-        items: [
-          'components/set-browser',
-          'components/set-file-loader',
-        ]
+        items: ["components/set-browser", "components/set-file-loader"],
       },
       {
-        type: 'category',
-        label: 'Views',
+        type: "category",
+        label: "Views",
         collapsed: false,
         items: [
-          'components/set-view-volumetric',
-          'components/set-view-geometry',
-          'components/set-view-slices',
-        ]
+          "components/set-view-volumetric",
+          "components/set-view-geometry",
+          "components/set-view-slices",
+        ],
       },
       {
-        type: 'category',
-        label: 'Controls',
+        type: "category",
+        label: "Controls",
         collapsed: false,
         items: [
-          'components/set-control-colormap',
-          'components/set-control-toolbar',
-          'components/set-control-models',
-        ]
+          "components/set-control-colormap",
+          "components/set-control-toolbar",
+          "components/set-control-models",
+        ],
       },
       {
-        type: 'category',
-        label: 'Panels',
+        type: "category",
+        label: "Panels",
         collapsed: false,
-        items: [
-          'components/set-grid-panel',
-          'components/set-pane',
-        ]
+        items: ["components/set-grid-panel", "components/set-pane"],
       },
       {
-        type: 'category',
-        label: 'Inputs',
+        type: "category",
+        label: "Inputs",
         collapsed: true,
         items: [
-          'components/set-input-color',
-          'components/set-input-range',
-          'components/set-input-select',
-        ]
+          "components/set-input-color",
+          "components/set-input-range",
+          "components/set-input-select",
+        ],
       },
       {
-        type: 'category',
-        label: 'Misc',
+        type: "category",
+        label: "Misc",
         collapsed: true,
-        items: [
-          'components/set-progress-bar',
-          'components/set-icon',
-        ]
+        items: ["components/set-progress-bar", "components/set-icon"],
       },
-    ]
+    ],
   },
 };
