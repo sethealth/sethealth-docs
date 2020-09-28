@@ -1,0 +1,105 @@
+---
+id: visualize-tomography
+title: Visualize tomography
+---
+
+Once you know how to load medical data, you may want to visualize it.
+
+In this case, Sethealth has some types of tomography visualizations. Thanks to some custom components, sethealth provides an easy
+and fancy visualization creation.
+
+## Workspace
+
+Here one main concept have to be highlighted: `workspace`s are the ones in charge of sharing the medical data loaded between components.
+All these components have a field called `workspace` where a `WorkspaceState` value should be placed.
+This is created as follows:
+
+```tsx
+import * as sethealth from "@sethealth/core";
+
+const handlers: MedHandler[] = await sethealth.med.loadFromSource({
+  type: "nrrd",
+  input:
+    "https://public1-eu-sethealth.ams3.cdn.digitaloceanspaces.com/public/ankle.nrrd.gz",
+});
+const medicalData: MedHandler = handlers[0];
+const myWorkpsace: WorkspaceState = sethealth.workspace.create(medicalData);
+```
+
+Now with this workspace the MedHandler can be shared between different components and they are syncronized.
+
+The workspace can be created from a `MedHandler` as above. Also, a workspace can be loaded from a `SerializableWorkspace`.
+For further information, you can check the `workspace` API.
+
+## View tomography slices
+
+Once we have a workspace we can use it to visualize the medical data.
+
+```tsx
+<SetViewSlices projection="axial" workspace={myWorkpsace}></SetViewSlices>
+```
+
+As above, visualization can be done with the component `<SetViewSlices>`. The value of its option `projection` defines the
+projection wich is going to be shown: `axial`, `coronal` or `sagital`. For further information, [check out the `<SetViewSlices>`
+component docs](../components/set-view-slices).
+
+### Example
+
+Here you can see and edit a complete example:
+
+<iframe
+  src="https://stackblitz.com/edit/view-tomography-slices?embed=1&file=App.tsx&hideExplorer=1&hideNavigation=1"
+  width="100%"
+  height="600px"
+></iframe>
+
+## View tomography in 3d
+
+Other kind of visualization is the 3D rendering of a tomography. This 3D model can be reached as follows.
+
+```tsx
+<SetViewVolumetric workspace={myWorkpsace}> </SetViewVolumetric>
+```
+
+As shown above, the same workspace is used. This component will render a 3D model of the same tomography. In the docs more
+information is available: [click here for further information](../components/set-view-volumetric).
+
+### Example
+
+Here you can see and edit a complete example:
+
+<iframe
+  src="https://stackblitz.com/edit/view-tomography-3d?embed=1&file=App.tsx&hideExplorer=1&hideNavigation=1"
+  width="100%"
+  height="600px"
+></iframe>
+
+## View grid panel
+
+Once all the visualizations have been explained, let's see all at the same time.
+The code you would use is:
+
+```tsx
+<SetGridPanel>
+  <SetPane viewId="1" type={"slices-axial"} workspace={myWorkpsace} />
+  <SetPane viewId="2" type={"volumetric"} workspace={myWorkpsace} />
+  <SetPane viewId="3" type={"slices-sagital"} workspace={myWorkpsace} />
+  <SetPane viewId="4" type={"slices-coronal"} workspace={myWorkpsace} />
+</SetGridPanel>
+```
+
+Sethealth provides a component, `<SetGridPanel>`, that creates a `grid` where you could use more than one
+visualizers. Furthermore, these visualizers would be syncronized due to they are sharing the same workspace.
+To see how to personalize this component, [check out their docs](../components/set-grid-panel).
+
+Say that `<SetPane>` is a generic component for `<SetViewVolumetric>` and `<SetViewSlices>`.
+
+### Example
+
+Here you can see and edit a complete example:
+
+<iframe
+  src="https://stackblitz.com/edit/view-tomography-grid?embed=1&file=App.tsx&hideExplorer=1&hideNavigation=1"
+  width="100%"
+  height="600px"
+></iframe>

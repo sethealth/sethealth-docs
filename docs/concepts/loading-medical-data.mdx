@@ -5,11 +5,11 @@ title: Loading Medical Data
 
 The first thing you might want to do with Sethealth is to load medical data into the system.
 
-Sethealth exposes all the `medical` data APIs in the `med` module. This module exposes a set of different APIs to load 
+Sethealth exposes all the `medical` data APIs in the `med` module. This module exposes a set of different APIs to load
 medical from different sources and formats.
 
 The main API is `med.loadFromSource(source: MedSource)`. This function takes a config object that specifis the source's input and the format
-of the data, for the moment, *sethealth* supports the following formats:
+of the data, for the moment, _sethealth_ supports the following formats:
 
 - `"dicom"`
 - `"nrrd"`
@@ -22,11 +22,12 @@ of the data, for the moment, *sethealth* supports the following formats:
 Here's an example of how to load a NRRD file from a URL source:
 
 ```tsx
-import * as sethealth from '@sethealth/core';
+import * as sethealth from "@sethealth/core";
 
 const handlers = await sethealth.med.loadFromSource({
-    type: 'dicom',
-    input: 'https://public1-eu-sethealth.ams3.cdn.digitaloceanspaces.com/public/ankle.nrrd.gz'
+  type: "nrrd",
+  input:
+    "https://public1-eu-sethealth.ams3.cdn.digitaloceanspaces.com/public/ankle.nrrd.gz",
 });
 
 const medicalData = handlers[0];
@@ -39,13 +40,12 @@ This can happen because a single source might contain more than one image.
 Now with `medicalData` you can do all sorts of things, such as, getting the raw pixels, quering the dicom for different
 metadata, compute the image histogram, visualize it... please refer to the `med` module docs to see all.
 
-
 ## Loading a local filesystem
 
 Sethealth includes a convenient API in order to load medical images from the local filesyste:
 
 ```tsx
-import * as sethealth from '@sethealth/core';
+import * as sethealth from "@sethealth/core";
 
 const handlers = await sethealth.med.loadFromFilesystem();
 const medicalData = handlers[0];
@@ -55,7 +55,6 @@ console.log(medicalData);
 This API will show a file selection dialog that the user can use to import medical data from their local computer.
 
 Analogously to the `loadFromSource()` API, this API also returns an array of medical resources.
-
 
 ## <SetFileLoader/>
 
@@ -68,13 +67,9 @@ Under the hood, `<SetFileLoader/>` uses the same APIs exposed in the `med` but a
 - Displaying a drag-and-drop area for users to load medical data easily
 - Display the correct progress bar while the data is being loaded.
 
-
 ```jsx
-<SetFileLoader
-    type="med"
-    onSetMedLoad={this.onMedLoad}
->
-    Drop your medical files here
+<SetFileLoader type="med" onSetMedLoad={this.onMedLoad}>
+  Drop your medical files here
 </SetFileLoader>
 ```
 
@@ -87,8 +82,7 @@ this components can also be used to load other kind of assets:
 
 - **"med"**: loading a medical files (dicoms, nifty, nrrd)
 - **"geometry"**: 3d model files, such as the .stl format.
-- **"files"**: any file, this component will load the file without trying to parse it. 
-
+- **"files"**: any file, this component will load the file without trying to parse it.
 
 ### Events
 
@@ -103,3 +97,10 @@ private async onMedLoad(ev: CustomEvent<FileLoadDetail<MedHandler>>) {
 }
 ```
 
+### See a complete example
+
+<iframe
+  src="https://stackblitz.com/edit/load-from-filesystem?embed=1&file=App.tsx&hideExplorer=1&hideNavigation=1"
+  width="100%"
+  height="600px"
+></iframe>

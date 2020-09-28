@@ -6,7 +6,10 @@ module.exports = {
       "introduction/architecture",
       "introduction/faq",
     ],
-    "Main Concepts": ["concepts/loading-medical-data"],
+    "Main Concepts": [
+      "concepts/loading-medical-data",
+      "concepts/visualize-tomography",
+    ],
     Modules: [
       "modules/auth",
       "modules/volume",
