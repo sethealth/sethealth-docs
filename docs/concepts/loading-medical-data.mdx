@@ -5,10 +5,11 @@ title: Loading Medical Data
 
 The first thing you might want to do with Sethealth is to load medical data into the system.
 
-Sethealth exposes all the `medical` data APIs in the `med` module. This module exposes a set of different APIs to load
-medical from different sources and formats.
+Sethealth exposes all the `medical` data APIs in the `med` module.
+This module exposes a set of different APIs to load medical from different sources and formats.
 
-The main API is `med.loadFromSource(source: MedSource)`. This function takes a config object that specifis the source's input and the format
+The main API is `med.loadFromSource(source: MedSource)`.
+This function takes a config object that specifis the source's input and the format
 of the data, for the moment, _sethealth_ supports the following formats:
 
 - `"dicom"`
@@ -61,7 +62,7 @@ Analogously to the `loadFromSource()` API, this API also returns an array of med
 Since loading medical data from the local system is an extremelly common use case, sethealth also includes a component
 that handles the whole process.
 
-Under the hood, `<SetFileLoader/>` uses the same APIs exposed in the `med` but also provides an extra value by:
+Under the hood, `<SetFileLoader/>` uses the same APIs exposed in the `med` but provides some extra value:
 
 - Showing a file selection dialog when clicked
 - Displaying a drag-and-drop area for users to load medical data easily
@@ -76,7 +77,7 @@ Under the hood, `<SetFileLoader/>` uses the same APIs exposed in the `med` but a
 As you can see in the example above, a `type` and an event handler is passed down.
 
 The `type` specifies which kind of resource this component is intended to load. By default it's `"med"`, however,
-this components can also be used to load other kind of assets:
+this components can also be used to load other kind of assets.
 
 ### Type values:
 
@@ -86,8 +87,8 @@ this components can also be used to load other kind of assets:
 
 ### Events
 
-Once this component loads some medical data (after some user interaction), it emits the `setMedLoad` event,
-which includes the same array of handlers that `loadFromSource()` and `loadFromFilesystem()`.
+Once this component sucesfully loads some medical data (after some user interaction), it emits the `setMedLoad` event,
+which includes the same array of handlers from `loadFromSource()` and `loadFromFilesystem()`.
 
 ```ts
 private async onMedLoad(ev: CustomEvent<FileLoadDetail<MedHandler>>) {
