@@ -9,6 +9,9 @@ module.exports = {
     "Main Concepts": [
       "concepts/loading-medical-data",
       "concepts/visualize-tomography",
+      "concepts/loading-geometry",
+      "concepts/visualize-geometry",
+      "concepts/sharing-data",
     ],
     Modules: [
       "modules/auth",

@@ -1,0 +1,67 @@
+---
+id: sharing-data
+title: Sharing Data
+---
+
+Sethealth is not only a medical data visualization tool. In fact, sethealth API provides in its modules some tools to
+share medical data alowing its users to upload it to the cloud. In this section you can see how to do it.
+
+## Uploading data with ensureSources()
+
+This method can be called from the `workspace` API and it uploads data only when strictly necesary.
+
+```tsx
+import * as sethealth from "@sethealth/core";
+
+const opts: sethealth.EnsureWorkspaceSourcesOptions = {
+    workspaces: [myWorkspace];
+ }
+sethealth.workspace.ensureSources(opts);
+```
+
+This method can be called from `med` or `geometry` too, thus avoiding creating a `WorkspaceState` object.
+Under the hood, calling this method form `workspace` uses `med.ensureSources()` and `geometry.ensureSources()`.
+If any `MedHandler` or `GeometryModel` have a source yet, the method will skip.
+
+## Serializing a WorkspaceState with serialize()
+
+The `workspace.serialize()` returns a `SerializableWorkspace` given a `WorkspaceState`. A `SerializableWorkspace` is a
+JSON-safe serializable object created in order to share a workspace or store it for persistence.
+
+```tsx
+import * as sethealth from "@sethealth/core";
+
+const opts: sethealth.SerializeWorkspaceOptions = {
+  workspace: myWorkspace,
+  medSource: url,
+};
+
+const mySerializableWorkspace: sethealth.SerializableWorkspace = await sethealth.workspace.serialize(
+  opts
+);
+```
+
+The field `medSource` is not required in order serialize a `WorkspaceState`. If it is not used, the `MedHandler` contained by the
+`WorkspaceState` must have a `MedSource` (it can be achive with the `ensureSources()` method). Althought, if you want to serialize
+a `WorkspaceState` without a `MedSource` is possible too, specifying a null value in `opts.medSource` that will overwrite the actual
+`MedHandler` value. For further information [check out the docs](../modules/workspace).
+]
+
+## Creating a WorkspaceState from a SerializableWorkspace
+
+Now let's see how to use a `SerializableWorkspace` to create the `WorkspaceState` again.
+
+```tsx
+import * as sethealth from "@sethealth/core";
+
+const medHandler = mySerializableWorkspace
+  ? await sethealth.med.loadFromSource(mySerializableWorkspace.medSource)[0]
+  : /*Another MedHandler must be used*/;
+const myWorkspace: sethealth.WorkspaceState = await sethealth.workspace.create(
+  medHandler,
+  mySerializableWorkspace
+);
+```
+
+First a `MedHandler` should be created as will be used to create the workspace. Then the `WorkspaceState` can be restored by using `workspace.create()`
+passing the `MedHandler` and the previously serialized `SerializableWorkspace`. For further information [check out the docs](../modules/workspace).

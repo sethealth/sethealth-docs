@@ -1,0 +1,51 @@
+---
+id: visualize-geometry
+title: Visualize Geometry
+---
+
+Seen a geometry over medical data could be an interesting use case. Imagine, for example, viewing a custom implant model over
+a tomography. That is why sethealth implements the module `geometry`.
+
+## Workspace
+
+Here the `workspace` has its own roll too. When a `workspace` contains a `MedHandler` and a `GeometryModel`, the geometry in
+`GeometryModel` could be visualized over the medical data contained in the `MedHandler`.
+
+```tsx
+const medHandlers = await sethealth.med.loadFromSource({
+  type: "nrrd",
+  input:
+    "https://public1-eu-sethealth.ams3.cdn.digitaloceanspaces.com/public/ankle.nrrd.gz",
+});
+const medHandler = medHandlers[0];
+const myWorkspace = await sethealth.workspace.create(medHandler);
+const geometries = await sethealth.geometry.loadFromSource({
+  type: "stl",
+  input:
+    "https://public1-eu-sethealth.ams3.cdn.digitaloceanspaces.com/public/geometry/fibula.stl.gz",
+});
+myWorkspace.models = [geometries];
+this.setState({ workspace: myWorkspace });
+```
+
+As shown here, the `workspace` is created with the `MedHandler` and then the `GeometryModel` is assigned to the same `workspace`.
+
+## View a Geometry
+
+Once the `workspace` contains a `MedHandler` and also a `GeometryModel`, the can be visualized with the component `<SetViewGeometry>`.
+
+```tsx
+<SetViewGeometry workspace={myWorkspace} />
+```
+
+The only required field is the `workspace`. For further information [check out the component docs](../components/set-view-geometry).
+
+### Example
+
+Here you can see and edit a complete example:
+
+<iframe
+  src="https://stackblitz.com/edit/view-geometry?embed=1&file=App.tsx&hideExplorer=1&hideNavigation=1"
+  width="100%"
+  height="600px"
+/>

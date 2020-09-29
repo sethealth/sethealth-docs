@@ -1,0 +1,95 @@
+---
+id: loading-geometry
+title: Loading Geometry
+---
+
+Once you know how to load and visualize medical data, let's see another sethealth funcionality.
+
+Sethealth's `geometry` module could be used to manage geometry models, for example, the ones that can be stored in a `"stl"` file.
+This module exposes a set of different APIs to load geometries.
+
+The main API is `geometry.loadFromSource(source: GeometrySource)`. Nowadays sethealth supports the `"stl"` format.
+
+## Loading from source
+
+Here's an example of how to load a `stl` file from a URL source:
+
+```tsx
+import * as sethealth from "@sethealth/core";
+
+const geometry: sethealth.GeometryModel = await sethealth.geometry.loadFromSource(
+  {
+    type: "stl",
+    input:
+      "https://public1-eu-sethealth.ams3.cdn.digitaloceanspaces.com/public/geometry/fibula.stl.gz",
+  }
+);
+```
+
+## Loading a local filesystem
+
+Sethealth includes a convenient API in order to load geometries from the local filesystem:
+
+```tsx
+import * as sethealth from "@sethealth/core";
+
+const geometries: sethealth.GeometryModel[] = await sethealth.med.loadFromFilesystem();
+```
+
+This API will show a file selection dialog that the user can use to import medical data from their local computer.
+
+Unlike the `loadFromSource()` API, this API returns an array of geometries as you can select more than one `"stl"` file.
+
+## <SetFileLoader/>
+
+Since loading geometries from the local system is an extremelly common use case, sethealth also includes a component
+that handles the whole process.
+
+Under the hood, `<SetFileLoader/>` uses the same APIs exposed in the `geometry` module but also provides an extra value by:
+
+- Showing a file selection dialog when clicked
+- Displaying a drag-and-drop area for users to load data easily
+- Display the correct progress bar while the data is being loaded.
+
+```jsx
+<SetFileLoader type="geometry" workspace={myWorkspace}>
+  Drop your files here
+</SetFileLoader>
+```
+
+As you can see in the example above, a `type` and an event handler is passed down.
+
+The `type` specifies which kind of resource this component is intended to load. By default it's `"med"`, however,
+this components can also be used to load other kind of assets:
+
+### Type values:
+
+- **"med"**: loading a medical files (dicoms, nifty, nrrd)
+- **"geometry"**: 3d model files, such as the .stl format.
+- **"files"**: any file, this component will load the file without trying to parse it.
+
+Unlike when medical data is loaded, when `type="geometry"` is used we need to specify a `workspace` to work with.
+Without doing anything, these geometries loaded will be appended to the `workspace.models` array.
+
+### Events
+
+Once this component loads some geometries (after some user interaction), it emits the `setGeometryLoad` event,
+which includes the same array of goemetries as `loadFromFilesystem()`.
+
+```ts
+import * as sethealth from "@sethealth/core";
+
+private async onGeometryLoad(ev: CustomEvent<FileLoadDetail<GeometryModel>>) {
+    const geometries: sethealth.GeometryModel[] = ev.detail.items;
+    const geometry: sethealth.GeometryModel = geometries[0]:
+    console.log(geometry);
+}
+```
+
+### See a complete example
+
+<iframe
+  src="https://stackblitz.com/edit/load-geometry?embed=1&file=App.tsx&hideExplorer=1&hideNavigation=1"
+  width="100%"
+  height="600px"
+></iframe>
