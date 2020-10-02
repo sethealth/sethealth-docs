@@ -7,11 +7,16 @@ module.exports = {
       "introduction/faq",
     ],
     "Main Concepts": [
-      "concepts/loading-medical-data",
-      "concepts/visualize-tomography",
-      "concepts/loading-geometry",
-      "concepts/visualize-geometry",
-      "concepts/sharing-data",
+      "concepts/service-account",
+      "concepts/bucket",
+      "concepts/dataset",
+    ],
+    "Quick Guides": [
+      "guides/loading-medical-data",
+      "guides/visualize-tomography",
+      "guides/loading-geometry",
+      "guides/visualize-geometry",
+      "guides/sharing-data",
     ],
     Modules: [
       "modules/auth",
