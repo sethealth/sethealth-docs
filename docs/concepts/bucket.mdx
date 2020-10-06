@@ -4,20 +4,47 @@ title: Buckets
 ---
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-
-## What are buckets?
-
-A bucket is an entity that allows you to store assets sith a determined expiration date and an availability.
-The difference between availability and storage expiration date lies in the ease of access to data.
+A bucket is an entity that allows you to store assets. Buckets can be used within Sethealth to upload and safely store different assets at
+different locations, availability, long-term storage and complicance modes. This properties are all further explained below.
 
 <div style={{textAlign:"center"}}>
-    <img alt="bucket" style={{borderRadius:"5px"}} src={useBaseUrl('docs-img/bucket.png')} />
+  <img alt="bucket" style={{borderRadius:"5px"}} src={useBaseUrl('docs-img/bucket.png')} />
 </div>
 
+### Location
 
- ### Create a buckets
+The location specifies the server location, where the data will be physically stored. We offer several locations in Europe and US.
 
-First of all, to create a bucket, you need to click the button shown below.
+Server location might be relevant because of legal reasons as well as tecnical ones, notice that a closer location
+to your clients might reduce the latency.
+
+
+### Availability
+
+When data is uploaded to Sethealth it will become inmediatelly available for download.
+However, "availability" lets you specify for how long this data will be generally available.
+
+Once the availability expires, it does not mean that the data will be deleted, it will be still safely stored, but disconnected from the public internet.
+
+The availability specifies the number of months, the data will be accesible.
+
+### Long term storage
+
+Once the availability expires, you might still want to store the assets for much longer. This is generally a requirement for
+certain medical resources that need to be stored for up-to 10 years in order to be compliant.
+
+This property is defined as number of years.
+
+### Compliance
+
+When enabled, Sethealth makes sure the storage of your data will follow the SEC Rule 17a-4(f), FINRA Rule 4511, and CFTC Regulation 1.31 by Cohasset Associates.
+This way, you can conform with local regulations about storing medical data in the long term.
+
+
+## Create a bucket
+
+Alright, now that we are familiar with the most important properties of a bucket, let's create one!
+In order to create a bucket, you need to click the button shown below.
 
 <img alt="Create dataset" style={{borderRadius:"5px"}} src={useBaseUrl('docs-img/bucket-create-1.png')} />
 
@@ -38,20 +65,31 @@ After that, the bucket is ready to be used.
 
 ### Upload to bucket
 
-Once the bucket is created, with its ID you will be able to upload assets to it. `Sethealth` API provides more than one way to
-upload data. All these methods have an option called `bucketID`. Using this field, you can chose a bucket where upload the data to.
+Once a bucket is created, a new bucket ID will be ready to be used within your application. `Sethealth` API provides more than one way to
+upload data, but all these methods have an option called `bucketID`. Using this field, you can choose on which bucket data will be uploaded.
 
 ```tsx
 import * as sethealth from "@sethealth/core";
 
+// Load a single medical resource from the local system
 const medHandler = await sethealth.med.loadFromFilesystem()[0];
-medHandler.upload({  
-    public: true;
-    bucketID: "bu-5669122872442880";
-    allowSensibleData: true;
+
+// Upload the resource to the specified bucket
+const {secret} = await medHandler.upload({  
+   bucketID: "bu-5669122872442880";
 });
+
+// The secret is a string, that can be used to retrieve the resource through internet in a safe,
+// end-to-end encrypted way
 ```
 
-In the previous example, some medical files are loaded from the user's filesystem. Then, to these files, some medHandlers are assigned
-dynamically (one handler for each case). In this case let's suppose that only one case is selected, and only a MedHandler will be created.
-Then, with this MedHandler, upload() method is called to the bucket whose ID is specified.
+In the previous example, a medical resource is loaded from the user's filesystem, then using the MedHandler's upload() method,
+the data is automatically serialized, anonymized, end-to-end encrypted and uploaded to the specified bucket.
+
+```tsx
+// Let's download the same medical image from the upload's secret
+const medHandler = await sethealth.med.loadFromSource(secret);
+console.log(medHandler);
+```
+
+Please refer to our [guide about sharing data](guides/sharing-data) for further detail.
