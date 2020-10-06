@@ -20,9 +20,10 @@ module.exports = {
     ],
     Modules: [
       "modules/auth",
-      "modules/volume",
+      "modules/med",
       "modules/geometry",
       "modules/workspace",
+      "modules/dataset",
       "modules/storage",
       "modules/utils",
     ],

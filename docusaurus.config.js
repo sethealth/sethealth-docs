@@ -38,7 +38,6 @@ module.exports = {
       '@docusaurus/preset-classic',
       {
         docs: {
-          homePageId: 'introduction/getting-started',
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
             'https://github.com/sethealth/sethealth-docs/edit/master/',
