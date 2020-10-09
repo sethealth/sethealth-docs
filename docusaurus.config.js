@@ -32,6 +32,13 @@ module.exports = {
     footer: {
       copyright: `Copyright © ${new Date().getFullYear()} Sethealth.`,
     },
+    colorMode: {
+      switchConfig: {
+        darkIcon: '🌑',
+        lightIcon: '💡',
+
+      }
+    }
   },
   presets: [
     [

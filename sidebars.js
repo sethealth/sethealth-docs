@@ -4,7 +4,6 @@ module.exports = {
       "introduction/getting-started",
       "introduction/browser-support",
       "introduction/architecture",
-      "introduction/faq",
     ],
     "Main Concepts": [
       "concepts/service-account",
