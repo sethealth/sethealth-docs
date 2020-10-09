@@ -64,7 +64,7 @@ After that, the bucket is ready to be used.
 ### Upload to bucket
 
 Once a bucket is created, a new bucket ID will be ready to be used within your application. `Sethealth` API provides more than one way to
-upload data, but all these methods have an option called `bucketID`. Using this field, you can choose on which bucket data will be uploaded.
+upload data, but all these methods have an option called `bucket`. Using this field, you can choose on which bucket data will be uploaded.
 
 ```tsx
 import * as sethealth from "@sethealth/core";
@@ -74,7 +74,7 @@ const medHandler = await sethealth.med.loadFromFilesystem()[0];
 
 // Upload the resource to the specified bucket
 const {secret} = await medHandler.upload({  
-   bucketID: "bu-5669122872442880";
+   bucket: "bu-5669122872442880";
 });
 
 // The secret is a string, that can be used to retrieve the resource through internet in a safe,
