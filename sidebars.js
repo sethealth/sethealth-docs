@@ -11,7 +11,7 @@ module.exports = {
       "concepts/bucket",
       "concepts/dataset",
     ],
-    "Quick Guides": [
+    "Guides": [
       "guides/loading-medical-data",
       "guides/visualize-tomography",
       "guides/loading-geometry",
@@ -51,7 +51,7 @@ module.exports = {
         items: [
           "components/set-control-colormap",
           "components/set-control-toolbar",
-          "components/set-control-models",
+          "components/set-control-geometries",
         ],
       },
       {

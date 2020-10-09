@@ -3,29 +3,133 @@ id: getting-started
 title: Getting Started
 slug: /
 ---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
 Sethealth is a toolkit that allows developers write healthcare software easier. The services and SDK provided allows you to focus into building a great product, without having to worry about handling all the different medical formats and protocols, making sure data is correctly anonymized and safely encrypted for storage, visualizating, annotating, measuring...
 
-1. Today, the access of Sethealth SDK is only [under invitation](https://sethealth.typeform.com/to/hOvMvs).
+#### 1. Today, the access of Sethealth SDK is only [under invitation](https://sethealth.typeform.com/to/hOvMvs).
 
-2. Install the Sethealth SDK:
+#### 2. Install the Sethealth SDK
+
+<Tabs
+groupId="framework"
+defaultValue="core"
+values={[
+    {label: 'Core', value: 'core'},
+    {label: 'React', value: 'react'},
+    {label: 'Angular', value: 'angular'},
+]}>
+<TabItem value="core">
 
 ```bash
 npm install @sethealth/core
 ```
 
-3. Login into the [Sethealth Dashboard](https://dashboard.set.health)
+</TabItem>
 
-4. Get your public key credentials
+<TabItem value="react">
 
-5. Import `@sethealth/core` and initialize()
+```bash
+npm install @sethealth/react
+```
+
+</TabItem>
+
+<TabItem value="angular">
+
+```bash
+npm install @sethealth/angular
+```
+
+</TabItem>
+</Tabs>
+
+
+#### 3. Login into the [Sethealth Dashboard](https://dashboard.set.health)
+
+Get your app's public key by clicking the "Web API integration" button.
+It will be a string such as:
+
+```
+pub_YOURCOMPANY_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+
+#### 5. Run `sethealth.initialize()`
+
+Once you have your public key, you just have to import the SDK and call the `initialize()`
+method with your public key.
+
+You will find this code in the [dashboard](https://dashboard.set.health/admin/dashboard).
+
+<Tabs
+groupId="framework"
+values={[
+    {label: 'Core', value: 'core'},
+    {label: 'React', value: 'react'},
+    {label: 'Angular', value: 'angular'},
+]}>
+<TabItem value="core">
 
 ```js
 import * as sethealth from '@sethealth/core';
 
 async function init() {
-    const API_KEY = "YOUR API KEY";
-    await sethealth.initialize(API_KEY);
+    await sethealth.initialize(
+        "pub_YOURCOMPANY_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    );
 }
 ```
+
+</TabItem>
+
+<TabItem value="react">
+
+```tsx
+import * as sethealth from '@sethealth/react';
+
+async function init() {
+    await sethealth.initialize(
+        "pub_YOURCOMPANY_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    );
+    ReactDOM.render(App, root);
+}
+
+init()
+```
+
+</TabItem>
+
+<TabItem value="angular">
+
+```tsx
+import { SethealthModule } from '@sethealth/angular';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [
+      BrowserModule,
+      SethealthModule.forRoot({
+          key: "pub_YOURCOMPANY_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      })
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}
+```
+
+</TabItem>
+</Tabs>
+
+At this point, you can start playing with the SDK. Please check out some of our guides:
+
+- [How to load medical data](guides/loading-medical-data).
+- [How to share data](guides/sharing-data).
+- [How to visualize medical data](guides/visualize-tomography).

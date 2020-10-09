@@ -3,13 +3,28 @@ id: sharing-data
 title: Sharing Data
 ---
 
-Sethealth is not only a medical data visualization tool. In fact, Sethealth API provides in its modules some tools to
-share medical data allowing its users to upload it to the cloud. In this section you can see how to do it.
+Sethealth is not only a medical data visualization tool. In fact, Sethealth API makes
+it very easy and safe to share medical data, allowing its users to upload it to the cloud.
 
-## Uploading data
+In this section you can see how to do it.
+
+## Access token
+
+First of all, in order to upload data and use the cloud services, it's required an access token.
+This access token allows the SDK to upload and download data in a safe and controlled way.
+
+Once you generate a token, it must be passed to the SDK using the `auth` module.
+```js
+await sethealth.auth.setAccessToken(token);
+```
+
+Notice that access tokens are short-lived, meaning it expires few hours after its creation, so they must 
+be generated on-demand in your own backend.
+
+[Learn how to create access tokens from a service account](../concepts/service-account).
 
 
-## Uploading data with ensureSources()
+## Uploading data with `ensureSources()`
 
 This method can be called from the `workspace` API and it uploads data only when strictly necesary.
 
@@ -25,7 +40,7 @@ This method can be called from `med` or `geometry` too, thus avoiding creating a
 Under the hood, calling this method form `workspace` uses `med.ensureSources()` and `geometry.ensureSources()`.
 If any `MedHandler` or `GeometryModel` have a source yet, the method will skip.
 
-## Serializing a WorkspaceState with serialize()
+## Serializing a WorkspaceState with `serialize()`
 
 The `workspace.serialize()` returns a `SerializableWorkspace` given a `WorkspaceState`. A `SerializableWorkspace` is a
 JSON-safe serializable object created in order to share a workspace or store it for persistence.
