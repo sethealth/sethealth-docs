@@ -29,10 +29,7 @@ const handlers = await sethealth.med.loadFromSource({
   type: "nrrd",
   input:
     "https://public1-eu-sethealth.ams3.cdn.digitaloceanspaces.com/public/ankle.nrrd.gz",
-});
-
-const medicalData = handlers[0];
-console.log(medicalData);
+})[0];
 ```
 
 As you can see, this API returns an array of handlers, each one is potentially a different medical resource.
@@ -48,9 +45,7 @@ Sethealth includes a convenient API in order to load medical images from the loc
 ```tsx
 import * as sethealth from "@sethealth/core";
 
-const handlers = await sethealth.med.loadFromFilesystem();
-const medicalData = handlers[0];
-console.log(medicalData);
+const handlers = await sethealth.med.loadFromFilesystem()[0];
 ```
 
 This API will show a file selection dialog that the user can use to import medical data from their local computer.
@@ -93,9 +88,7 @@ which includes the same array of handlers from `loadFromSource()` and `loadFromF
 ```ts
 private async onMedLoad(ev: CustomEvent<FileLoadDetail<MedHandler>>) {
     const handlers = ev.detail.items;
-    const medicalData = handlers[0]:
-    console.log(medicalData);
-}
+    }
 ```
 
 ### See a complete example

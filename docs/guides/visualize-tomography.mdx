@@ -28,14 +28,12 @@ Alright, let's see how we can create a `workspace` from previously loaded medica
 ```tsx
 import * as sethealth from "@sethealth/core";
 
-const handlers = await sethealth.med.loadFromSource({
+const handler = await sethealth.med.loadFromSource({
   type: "nrrd",
   input:
     "https://public1-eu-sethealth.ams3.cdn.digitaloceanspaces.com/public/ankle.nrrd.gz",
-});
-const medicalData: MedHandler = handlers[0];
-const workspace: WorkspaceState = sethealth.workspace.create(medicalData);
-console.log('This workspace represent my medical data', workspace);
+})[0];
+const workspace = sethealth.workspace.create(handler);
 ```
 
 Now with this workspace can be passed down to different components and all of them will share the same medical data.

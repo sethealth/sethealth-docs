@@ -38,7 +38,7 @@ await sethealth.workspace.ensureSources({
 
 This method can be called from `med` or `geometry` too, thus avoiding creating a `WorkspaceState` object.
 Under the hood, calling this method form `workspace` uses `med.ensureSources()` and `geometry.ensureSources()`.
-If any `MedHandler` or `GeometryModel` have a source yet, the method will skip.
+If any `MedHandler` or `Geometry` have a source yet, the method will skip.
 
 ## Serializing a WorkspaceState with `serialize()`
 
