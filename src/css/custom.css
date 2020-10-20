@@ -49,3 +49,7 @@
 html[data-theme='dark'] .params {
   color: #84e0b6;
 }
+
+img {
+  max-width: 90%;
+}
