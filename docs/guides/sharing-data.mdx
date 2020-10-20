@@ -26,12 +26,13 @@ be generated on-demand in your own backend.
 
 ## Uploading data with `ensureSources()`
 
-This method can be called from the `workspace` API and it uploads data only when strictly necesary.
+This method can be called from the `workspace` API and it uploads data only when strictly necesary. This method returns
+a `SerializableWorkspace` as under the hood calls to `workspace.serialize()`. 
 
 ```tsx
 import * as sethealth from "@sethealth/core";
 
-await sethealth.workspace.ensureSources({
+const json = await sethealth.workspace.ensureSources({
   workspaces: [myWorkspace];
 });
 ```
@@ -58,7 +59,38 @@ The field `medSource` is not required in order serialize a `WorkspaceState`. If 
 `WorkspaceState` must have a `MedSource` (it can be achive with the `ensureSources()` method). Althought, if you want to serialize
 a `WorkspaceState` without a `MedSource` is possible too, specifying a null value in `opts.medSource` that will overwrite the actual
 `MedHandler` value. For further information [check out the docs](../modules/workspace).
-]
+
+
+## Uploading a SerializableWorkspace to _sethealth_ with uploadMetadata()
+
+Using `workspace.serialize()` or `workspace.ensureSources()` will return a `SerializableWorkspace`, but it is not uploaded yet. As mentioned,
+a `SerializableWorkspace` is a JSON-safe serializable object so it could be uploaded to _sethealth_ with the `uploadMetadata()` method of the
+`storage` API
+
+```tsx
+import * as sethealth from "@sethealth/core";
+
+const jsonstring = JSON.stringify(json);
+const secret = await sethealth.storage.uploadMetadata(jsonstring);
+```
+
+Now this `secret` is a string that contains an URL to share all the files attached.
+
+## Downloading a SerializableWorkspace from _sethealth_ with loadMetadata()
+
+After uploading data, let's see how to download it. With the secret generated before, we will be able to download the `JSON`
+that represents a `SerializableWorkspace`.
+
+```tsx
+import * as sethealth from "@sethealth/core";
+
+const jsonstring = await sethealth.storage.loadMetadata(secret);
+const json = JSON.parse(jsonstring) as SerializableWorkspace;
+```
+
+With the `SerializableWorkspace` now it is possible to create again the same `workspace` as before as it contains all the
+sources needed to download MedHandler and Geometries attached. To see how [check out to the next fragment](../guides/sharing-data#creating-a-workspacestate-from-a-serializableworkspace)
+
 
 ## Creating a WorkspaceState from a SerializableWorkspace
 
