@@ -25,42 +25,61 @@ Here's an example of how to load a NRRD file from a URL source:
 ```tsx
 import * as sethealth from "@sethealth/core";
 
-const handlers = await sethealth.med.loadFromSource({
+const result = await sethealth.med.loadFromSource({
   type: "nrrd",
   input:
     "https://public1-eu-sethealth.ams3.cdn.digitaloceanspaces.com/public/ankle.nrrd.gz",
-})[0];
+});
+
+if (result.error) {
+  console.error("Something happened while loading", result.error);
+  return;
+}
+
+const handlers: sethealth.MedHandler[] = result.value;
+const medicalData = handlers[0];
+console.log(medicalData);
 ```
 
-As you can see, this API returns an array of handlers, each one is potentially a different medical resource.
+As you can see, this `loadFromSource()` (and all loading APIs) return a `Result<T>` object. This is because loading
+APIs are likely to fail because of network of filesystem disconnections, so the developers need to take proper action when this errors happen.
+ 
+Now, the value of the `Result` is an array of `MedHandler`, each one is potentially a different medical resource.
 This can happen because a single source might contain more than one image.
 
 Now with `medicalData` you can do all sorts of things, such as, getting the raw pixels, quering the dicom for different
 metadata, compute the image histogram, visualize it... please refer to the `med` module docs to see all.
 
-## Loading a local filesystem
+## Loading from the filesystem
 
 Sethealth includes a convenient API in order to load medical images from the local filesyste:
 
 ```tsx
 import * as sethealth from "@sethealth/core";
 
-const handlers = await sethealth.med.loadFromFilesystem()[0];
+const result = await sethealth.med.loadFromFilesystem();
+if (result.error) {
+  console.error("Something happened while loading", result.error);
+  return;
+}
+
+const medicalData = result.value[0];
+console.log(medicalData);
 ```
 
 This API will show a file selection dialog that the user can use to import medical data from their local computer.
 
-Analogously to the `loadFromSource()` API, this API also returns an array of medical resources.
+Analogously to the `loadFromSource()` API, this API also returns `Result` object that can be unwrapped to an array of medical resources.
 
 ## `<SetFileLoader/>`
 
-Since loading medical data from the local system is an extremelly common use case, sethealth also includes a component
-that handles the whole process.
+Since loading medical data from the local system is an extremelly common use case, Sethealth comes with an UI component
+that handles the whole process seamlessly.
 
-Under the hood, `<SetFileLoader/>` uses the same APIs exposed in the `med` but provides some extra value:
+Under the hood, `<SetFileLoader/>` uses the same APIs exposed in `med`, but provides some extra value:
 
-- Showing a file selection dialog when clicked
-- Displaying a drag-and-drop area for users to load medical data easily
+- Showing a file selection dialog when clicked.
+- Displaying a drag-and-drop area for users to load medical data easily.
 - Display the correct progress bar while the data is being loaded.
 
 ```jsx
@@ -69,12 +88,10 @@ Under the hood, `<SetFileLoader/>` uses the same APIs exposed in the `med` but p
 </SetFileLoader>
 ```
 
-As you can see in the example above, a `type` and an event handler is passed down.
+As you can see in the example above, a `type` and an event handler are passed down as attributes.
 
 The `type` specifies which kind of resource this component is intended to load. By default it's `"med"`, however,
-this components can also be used to load other kind of assets.
-
-### Type values:
+this components can also be used to load other kind of assets, such as:
 
 - **"med"**: loading a medical files (dicoms, nifty, nrrd)
 - **"geometry"**: 3d model files, such as the .stl format.
@@ -86,7 +103,7 @@ Once this component sucesfully loads some medical data (after some user interact
 which includes the same array of handlers from `loadFromSource()` and `loadFromFilesystem()`.
 
 ```ts
-private async onMedLoad(ev: CustomEvent<FileLoadDetail<MedHandler>>) {
+private async onMedLoad(ev: CustomEvent<MedLoadDetail>) {
     const handlers = ev.detail.items;
     }
 ```

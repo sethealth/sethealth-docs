@@ -28,12 +28,18 @@ Alright, let's see how we can create a `workspace` from previously loaded medica
 ```tsx
 import * as sethealth from "@sethealth/core";
 
-const handler = await sethealth.med.loadFromSource({
+const result = await sethealth.med.loadFromSource({
   type: "nrrd",
   input:
     "https://public1-eu-sethealth.ams3.cdn.digitaloceanspaces.com/public/ankle.nrrd.gz",
-})[0];
-const workspace = sethealth.workspace.create(handler);
+});
+if (result.error) {
+  console.error(result.error);
+  return;
+}
+const medicalData: MedHandler = result.value[0];
+const workspace: WorkspaceState = sethealth.workspace.create(medicalData);
+console.log('This workspace represent my medical data', workspace);
 ```
 
 Now with this workspace can be passed down to different components and all of them will share the same medical data.
@@ -70,7 +76,7 @@ Here you can see and edit a complete example:
 Other kind of visualization is the Volumetric 3D rendering of a tomography, in this case, the `set-view-volumetric` would be use:
 
 ```tsx
-<SetViewVolumetric workspace={myWorkpsace}>/>
+<SetViewVolumetric workspace={workspace}>/>
 ```
 
 As shown above, the same workspace is also used. This component will render a volumetric ray casting of the same CT. Please refer to the 
@@ -94,10 +100,10 @@ Sethealth comes with a built-in grid component that simplifies the task, `set-gr
 
 ```tsx
 <SetGridPanel>
-  <SetPane viewId="1" type={"slices-axial"} workspace={myWorkpsace} />
-  <SetPane viewId="2" type={"volumetric"} workspace={myWorkpsace} />
-  <SetPane viewId="3" type={"slices-sagital"} workspace={myWorkpsace} />
-  <SetPane viewId="4" type={"slices-coronal"} workspace={myWorkpsace} />
+  <SetPane viewId="1" type="slices-axial" workspace={workspace} />
+  <SetPane viewId="2" type="volumetric" workspace={workspace} />
+  <SetPane viewId="3" type="slices-sagital" workspace={workspace} />
+  <SetPane viewId="4" type="slices-coronal" workspace={workspace} />
 </SetGridPanel>
 ```
 

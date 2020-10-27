@@ -10,7 +10,7 @@ a CT. Loading, generating and serializing geometries can be done through the `ge
 
 Here the `workspace` has its own role too. A workspace contains a list of geometry models:
 
-```js
+```ts
 workspace.geometries
 ```
 
@@ -20,24 +20,35 @@ then render the 3D model over the medical resource.
 
 ```tsx
 // Load medical data
-const medHandler = await sethealth.med.loadFromSource({
+const med = await sethealth.med.loadFromSource({
   type: "nrrd",
   input:
     "https://public1-eu-sethealth.ams3.cdn.digitaloceanspaces.com/public/ankle.nrrd.gz",
-})[0];
+});
+if (med.error) {
+  console.error(med.error);
+  return;
+}
+const medHandler = med.value[0];
 
 // Creating workspace from medical data
 const workspace = await sethealth.workspace.create(medHandler);
 
 // Load a geometry (from a .stl) file
-const geometries = await sethealth.geometry.loadFromSource({
+const result = await sethealth.geometry.loadFromSource({
   type: "stl",
   input:
     "https://public1-eu-sethealth.ams3.cdn.digitaloceanspaces.com/public/geometry/fibula.stl.gz",
 });
 
+if (result.error) {
+  console.error(result.error);
+  return;
+}
+
 // Append the geometry to the workspace
-workspace.addGeometry(geometries);
+const geometries = result.value;
+workspace.addGeomestries(...geometries);
 
 this.setState({ workspace });
 ```

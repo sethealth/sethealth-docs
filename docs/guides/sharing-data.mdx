@@ -21,7 +21,7 @@ await sethealth.auth.setAccessToken(token);
 Notice that access tokens are short-lived, meaning it expires few hours after its creation, so they must 
 be generated on-demand in your own backend.
 
-[Learn how to create access tokens from a service account](../concepts/service-account).
+[Learn how to create access tokens from a service account](../dashboard/service-account).
 
 
 ## Uploading data with `ensureSources()`
@@ -99,7 +99,11 @@ Now let's see how to use a `SerializableWorkspace` to create the `WorkspaceState
 ```tsx
 import * as sethealth from "@sethealth/core";
 
-const workspace = await sethealth.workspace.loadFromWorkspace(json);
+const result = await sethealth.workspace.loadFromWorkspace(json);
+if (result.error) {
+  console.error(result.error);
+}
+const workspace = result.value;
 ```
 
 First a `MedHandler` should be created as will be used to create the workspace. Then the `WorkspaceState` can be restored by using `workspace.create()`

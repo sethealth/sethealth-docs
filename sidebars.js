@@ -5,10 +5,10 @@ module.exports = {
       "introduction/browser-support",
       "introduction/architecture",
     ],
-    "Main Concepts": [
-      "concepts/service-account",
-      "concepts/bucket",
-      "concepts/dataset",
+    "Dashboard": [
+      "dashboard/service-account",
+      "dashboard/bucket",
+      "dashboard/dataset",
     ],
     "Guides": [
       "guides/loading-medical-data",

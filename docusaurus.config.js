@@ -30,7 +30,7 @@ module.exports = {
       ],
     },
     footer: {
-      copyright: `Copyright © ${new Date().getFullYear()} Sethealth.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Sethealth GmbH.`,
     },
     colorMode: {
       switchConfig: {
