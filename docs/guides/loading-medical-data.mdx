@@ -22,12 +22,12 @@ of the data, for the moment, _sethealth_ supports the following formats:
 
 Here's an example of how to load a NRRD file from a URL source:
 
+
 ```tsx
 import * as sethealth from "@sethealth/core";
 
 const result = await sethealth.med.loadFromSource({
-  type: "nrrd",
-  input:
+  source:
     "https://public1-eu-sethealth.ams3.cdn.digitaloceanspaces.com/public/ankle.nrrd.gz",
 });
 

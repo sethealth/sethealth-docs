@@ -50,7 +50,7 @@ npm install @sethealth/angular
 #### 3. Login into the [Sethealth Dashboard](https://dashboard.set.health)
 
 Get your app's public key by clicking the "Web API integration" button.
-It will be a string such as:
+It will be a string such as the following one:
 
 ```
 pub_YOURCOMPANY_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -128,6 +128,27 @@ export class AppModule {}
 
 </TabItem>
 </Tabs>
+
+#### 6. (Optional) Generate access token
+
+Cloud services, such as storage and datasets requires of a short-living access token.
+In order to generate these tokens, two steps need to be complited:
+
+1. [Create service account](dashboard/service-account#create-a-service-account)
+2. [Integrate our server-side client](dashboard/service-account#using-service-account) into your backend.
+
+This architecture gives you full control of which users can use our services.
+
+Once you have a token, it can be used by the library using the `auth` module:
+
+```ts
+const token = await callMyBackend();
+await sethealth.auth.setAccessToken(token);
+```
+
+After that, all the SDK APIs that connect with our services will be enabled.
+
+#### Next steps
 
 At this point, you can start playing with the SDK. Please check out some of our guides:
 

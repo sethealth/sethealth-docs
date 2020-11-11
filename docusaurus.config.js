@@ -7,6 +7,10 @@ module.exports = {
   organizationName: 'sethealth', // Usually your GitHub org/user name.
   projectName: 'sethealth-docs', // Usually your repo name.
   themeConfig: {
+    prism: {
+      theme: require('prism-react-renderer/themes/github'),
+      darkTheme: require('prism-react-renderer/themes/vsDark'),
+    },
     navbar: {
       title: 'Sethealth',
       hideOnScroll: true,
@@ -15,6 +19,7 @@ module.exports = {
         alt: 'Sethealth Logo',
         src: 'img/logo-light.svg',
       },
+      
       items: [
         {
           to: 'docs/',
