@@ -4,6 +4,8 @@ module.exports = {
       "introduction/getting-started",
       "introduction/browser-support",
       "introduction/architecture",
+      "introduction/react",
+      "introduction/angular",
     ],
     "Dashboard": [
       "dashboard/service-account",

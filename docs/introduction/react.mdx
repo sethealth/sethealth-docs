@@ -1,0 +1,137 @@
+---
+id: react
+title: React starter
+---
+
+While Sethealth can be used by any web app, we provide react bindings for convenience and improved developer experience.
+
+Let's create an react app from scratch using Sethealth:
+
+### 1. Create react app using Typescript
+
+```bash
+npx create-react-app my-react-app --template typescript
+cd my-react-app
+```
+
+While Sethealth can be used without typescript, we strongly recomend using it, since most of our API docs are described
+as Typescript interfaces. 
+
+### 2. Install **@sethealth/react**
+
+```bash
+npm install @sethealth/react
+```
+
+### 3. Get your **public-key** from the [dashboard](https://dashboard.set.health)
+
+It should look like:
+
+```
+pub_yourcompany_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+### 4. Initialize **sethealth** in main.ts
+
+Once you have your **public-key**, you should call the `sethealth.initialize(publicKey)` function in order to activate the API.
+
+```tsx title="/src/index.ts" {7-13}
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as sethealth from '@sethealth/react';
+
+async function initSethealth() {
+  await sethealth.initialize(
+    "pub_yourcompany_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  );
+}
+
+initSethealth();
+
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+```
+
+### 5. Use Sethealth in your component
+
+At this point, you can see all the features of the SDK, in this example, we will:
+- 1. Load a `.nrrd` medical image from an URL into a MedHandler.
+- 2. Create a [workspace](../)
+- 3. Use the `<SetViewVolumetric>` in order to perform a volumetric ray casting rendering of the image.
+
+```tsx title="/src/App.tsx" {3-4,15-18,22-24,32,43-45}
+import React, { useState } from 'react';
+import './App.css';
+import * as sethealth from '@sethealth/react';
+import { med, SetProgressBar, SetViewVolumetric } from '@sethealth/react';
+
+const MEDICAL_IMAGE = "https://public1-eu-sethealth.ams3.cdn.digitaloceanspaces.com/public/ankle.nrrd.gz";
+
+function App() {
+  const [workspace, setWorkspace] = useState<sethealth.WorkspaceState>();
+  const [error, setError] = useState<Error>();
+  const [loading, setLoading] = useState<number>();
+
+  return (
+    <div className="App">
+      {loading === undefined && (
+        <button onClick={async () => {
+          const result = await sethealth.med.loadFromSource({
+            type: 'nrrd',
+            input: MEDICAL_IMAGE,
+          }, (progress) => setLoading(progress));
+          if (result.error) {
+            setError(result.error);
+          } else {
+            const handler = result.value[0];
+            const workspace = await sethealth.workspace.create(handler);
+            setWorkspace(workspace);
+          }
+        }}>
+          Load medical image
+        </button>
+      )}
+
+      {loading !== undefined && loading < 1.0 && (
+        <SetProgressBar value={loading}/>
+      )}
+
+      {error && (
+        <div>
+          Loading failed
+          {error}
+        </div>
+      )}
+
+      {workspace && (
+        <SetViewVolumetric
+          workspace={workspace}
+        />
+      )}
+    </div>
+  );
+}
+
+export default App;
+```
+
+### 6. Next steps
+
+Please refer to our full guides to get better understanding of what is going on:
+
+- [Loading medical data](../guides/loading-medical-data)
+- [Sharing data](../guides/sharing-data)
+- [Visualize a CT](../guides/visualize-tomography)
+- [Visualize Geometry](../guides/visualize-geometry)
+
+
+:::note Download our starter
+You can find the React app on this repo, ready to fork:
+[http://github.com/sethealth/react-starter](http://github.com/sethealth/react-starter)
+:::

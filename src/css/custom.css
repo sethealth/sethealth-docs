@@ -53,3 +53,14 @@ html[data-theme='dark'] .params {
 img {
   max-width: 90%;
 }
+
+.docusaurus-highlight-code-line {
+  background-color: rgb(225 233 241);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+html[data-theme='dark'] .docusaurus-highlight-code-line {
+  background-color: rgb(45 48 51);
+}

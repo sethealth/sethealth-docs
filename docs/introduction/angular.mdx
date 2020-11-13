@@ -1,0 +1,136 @@
+---
+id: angular
+title: Angular starter
+---
+
+While Sethealth can be used by any web app, we provide angular bindings for convenience and improved developer experience.
+
+Let's create an react app from scratch using Sethealth:
+
+### 1. Create angular app using @angular/cli
+
+```bash
+npm install -g @angular/cli
+ng new my-sethealth-app
+cd my-sethealth-app
+```
+
+### 2. Install **@sethealth/angular**
+
+```bash
+npm install @sethealth/angular
+```
+
+### 3. Get your **public-key** from the [dashboard](https://dashboard.set.health)
+
+It should look like:
+
+```
+pub_yourcompany_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+### 4. Import  **sethealth** in main.ts
+
+Once you have your **public-key**, you should import the `SethealthModule` into the root NgModule of your app and pass it down.
+Since Sethealth is registered as a singleton, it uses [the `forRoot()` pattern](https://angular.io/guide/singleton-services#the-forroot-pattern).
+
+
+```tsx title="/src/app.module.ts" {5,13-15}
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
+import { AppComponent } from './app.component';
+import { SethealthModule } from '@sethealth/angular';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    SethealthModule.forRoot({
+      publicKey: "pub_yourcompany_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    })
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+```
+
+### 5. Use Sethealth in your component
+
+At this point, you can see all the features of the SDK, in this example, we will:
+- 1. Load a `.nrrd` medical image from an URL into a MedHandler.
+- 2. Create a [workspace](../)
+- 3. Use the `<set-view-volumetric>` in order to perform a volumetric ray casting rendering of the image.
+
+```tsx title="/src/app/app.component.tsx" {3-4,19-29}
+import { Component } from '@angular/core';
+
+import * as sethealth from '@sethealth/angular';
+const MEDICAL_IMAGE = "https://public1-eu-sethealth.ams3.cdn.digitaloceanspaces.com/public/ankle.nrrd.gz";
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+
+  loading = false;
+  error?: Error;
+  workspace?: sethealth.WorkspaceState;
+
+  async onClick() {
+    this.loading = true;
+    const result = await sethealth.med.loadFromSource({
+      type: 'nrrd',
+      input: MEDICAL_IMAGE,
+    });
+    if (result.error) {
+      this.error = result.error;
+    } else {
+      const handler = result.value[0];
+      const workspace = await sethealth.workspace.create(handler);
+      this.workspace = workspace;
+    }
+    this.loading = false;
+  }
+}
+```
+
+```html title="/src/app/app.component.html" {8-11,13-15}
+<button
+  *ngIf="!loading"
+  (click)="onClick()"
+>
+  Load medical image
+</button>
+
+<set-progress-bar
+  *ngIf="loading"
+  value="1"
+></set-progress-bar>
+
+<set-view-volumetric
+  [workspace]="workspace"
+></set-view-volumetric>
+```
+
+
+### 6. Next steps
+
+Please refer to our full guides to get better understanding of what is going on:
+
+- [Loading medical data](../guides/loading-medical-data)
+- [Sharing data](../guides/sharing-data)
+- [Visualize a CT](../guides/visualize-tomography)
+- [Visualize Geometry](../guides/visualize-geometry)
+
+
+:::note Download our starter
+You can find the Angular app on this repo, ready to fork:
+[http://github.com/sethealth/angular-starter](http://github.com/sethealth/angular-starter)
+:::
