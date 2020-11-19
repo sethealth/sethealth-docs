@@ -1,0 +1,114 @@
+---
+id: custom-shaders
+title: Custom shaders
+---
+
+We have already learned how to us the `<set-view-volumetric>` component to render computed tomographies in 3D.
+While this component comes with 3 built-in shaders:
+
+```html
+<set-view-volumetric shader="max-intensity"></set-view-volumetric>
+```
+
+- `"basic"`
+- `"lighting"`
+- `"shadows"`
+- `"max-intensity"`
+
+Even though this 4 shaders should cover most of the functionality, it's possible to go even more low level
+and write some for special use cases or just experimenting new ways to visualize your data.
+
+Sethealth API makes writing this shaders extremelly easy by abstracting aways all the setup required to get 
+a production ready ray caster.
+
+
+## Anatomy of a volumetric ray caster shader
+
+A computed tomography can be seen as a 3D image, a volume or a tensor in ℝ3. This image is loaded by Sethealth into a 3D texture in the GPU,
+then a [volume ray casting](https://en.wikipedia.org/wiki/Volume_ray_casting) algorithm renders a 2D projection into the screen.
+
+Notice that this algoritm needs to "simulate" a light ray going from the camera all the way to end of the volume, and that needs to be computed for **every pixel**
+of the screen.
+
+Fortunately today's GPUs can run this algorithm efficiently in realtime!
+These programs are called **shaders**, concretely we are going to write a [fragment shader](https://thebookofshaders.com/01/) using the [GLSL language](https://en.wikipedia.org/wiki/OpenGL_Shading_Language).
+
+A fragment shader is small program that runs for **each** pixel in the screen, takes variables (uniforms), textures and the screen position as input and returns a color as output.
+
+Alright! let's look at the [**max-intensity**](https://en.wikipedia.org/wiki/Maximum_intensity_projection) shader:
+
+```cpp {19-30}
+void main() {
+    // Internally this function takes all the relevant input and
+    // prepares a high level "Ray" struct with all the relevant information
+    // for our ray casting, such as: direction, number of steps, delta vector...
+    Ray ray = computeRay();
+
+    // Early return if we are outside the volume
+    if (ray.outside) {
+        // If we are outside the volume, just set color to black (0,0,0,0) and return early.
+        gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+        return;
+    }
+
+    // Initialize a cursor variable at the start
+    vec3 cursor = ray.start;
+
+    float maxDensity = 0.0;
+
+    // Walk N steps, advancing our cursor
+    // This loop is literaly our ray advancing through the 3D space.
+    for (int i = 0; i < ray.steps; i++) {
+        // Advance the cursor using delta on each iteration
+        cursor += ray.delta;
+
+        // Read the current value from the medical image
+        float value = readVolume(cursor);
+
+        // Update maxValue, taking the maximun value
+        maxValue = max(value, maxValue);
+    }
+
+    // Return the final pixel color based on the maxValue recorded.
+    // In this case, we are setting the R(red), G(green) and B(blue) components to the same value (maxValue),
+    // so the final color will be greyscaled.
+
+    // This last 1.0, correspond to the Alpha(transparency) component.
+    gl_FragColor = vec4(maxValue, maxValue, maxValue, 1.0);
+}
+```
+
+
+## Built-in functions
+Sethealth provides built-in functions to create your own volumetric ray caster on top of the medical data.
+
+### Ray computeRay()
+Creates a Ray struct, containing all the ray properties required to perform a ray casting.
+
+```cpp
+struct Ray {
+    vec3 start;     // start point of the ray caster
+    vec3 end;       // end point of the ray caster
+    vec3 delta;     // delta vector of each iteration
+    vec3 direction; // normalized direction of the eye ray
+    int steps;      // number of steps of our ray caster
+    bool outside;   // "true" when the ray is outside the volume
+};
+```
+
+### float readVolume(vec3 cursor)
+Returns the normalized pixel value (density) of our volume at the specified 3D point.
+
+### vec3 readNormal(vec3 cursor)
+Returns the normalized normal vector at the specified 3D point.
+Normals are computed as the gradient of the volume
+
+### vec4 readColormap(float density)
+Resolves the color vector for the specified density value in thee [0, 1].
+
+### vec4 readColor(vec3 cursor)
+Resolves the color vector based on the density at the specified 3D point.
+
+### float depthAt(vec3 cursor)
+Returns the non-linear depth at the specified 3D point.
+This value can be passed directly to gl_FragDepth.

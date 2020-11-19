@@ -18,6 +18,7 @@ module.exports = {
       "guides/loading-geometry",
       "guides/visualize-geometry",
       "guides/sharing-data",
+      "guides/custom-shaders",
     ],
     Modules: [
       "modules/auth",
