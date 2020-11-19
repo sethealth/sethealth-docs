@@ -39,42 +39,42 @@ Alright! let's look at the [**max-intensity**](https://en.wikipedia.org/wiki/Max
 
 ```cpp {19-30}
 void main() {
-    // Internally this function takes all the relevant input and
-    // prepares a high level "Ray" struct with all the relevant information
-    // for our ray casting, such as: direction, number of steps, delta vector...
-    Ray ray = computeRay();
+  // Internally this function takes all the relevant input and
+  // prepares a high level "Ray" struct with all the relevant information
+  // for our ray casting, such as: direction, number of steps, delta vector...
+  Ray ray = computeRay();
 
-    // Early return if we are outside the volume
-    if (ray.outside) {
-        // If we are outside the volume, just set color to black (0,0,0,0) and return early.
-        gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
-        return;
-    }
+  // Early return if we are outside the volume
+  if (ray.outside) {
+    // If we are outside the volume, just set color to black (0,0,0,0) and return early.
+    gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+    return;
+  }
 
-    // Initialize a cursor variable at the start
-    vec3 cursor = ray.start;
+  // Initialize a cursor variable at the start
+  vec3 cursor = ray.start;
 
-    float maxDensity = 0.0;
+  float maxDensity = 0.0;
 
-    // Walk N steps, advancing our cursor
-    // This loop is literaly our ray advancing through the 3D space.
-    for (int i = 0; i < ray.steps; i++) {
-        // Advance the cursor using delta on each iteration
-        cursor += ray.delta;
+  // Walk N steps, advancing our cursor
+  // This loop is literaly our ray advancing through the 3D space.
+  for (int i = 0; i < ray.steps; i++) {
+    // Advance the cursor using delta on each iteration
+    cursor += ray.delta;
 
-        // Read the current value from the medical image
-        float value = readVolume(cursor);
+    // Read the current value from the medical image
+    float value = readVolume(cursor);
 
-        // Update maxValue, taking the maximun value
-        maxValue = max(value, maxValue);
-    }
+    // Update maxValue, taking the maximun value
+    maxValue = max(value, maxValue);
+  }
 
-    // Return the final pixel color based on the maxValue recorded.
-    // In this case, we are setting the R(red), G(green) and B(blue) components to the same value (maxValue),
-    // so the final color will be greyscaled.
+  // Return the final pixel color based on the maxValue recorded.
+  // In this case, we are setting the R(red), G(green) and B(blue) components to the same value (maxValue),
+  // so the final color will be greyscaled.
 
-    // This last 1.0, correspond to the Alpha(transparency) component.
-    gl_FragColor = vec4(maxValue, maxValue, maxValue, 1.0);
+  // This last 1.0, correspond to the Alpha(transparency) component.
+  gl_FragColor = vec4(maxValue, maxValue, maxValue, 1.0);
 }
 ```
 
@@ -87,12 +87,12 @@ Creates a Ray struct, containing all the ray properties required to perform a ra
 
 ```cpp
 struct Ray {
-    vec3 start;     // start point of the ray caster
-    vec3 end;       // end point of the ray caster
-    vec3 delta;     // delta vector of each iteration
-    vec3 direction; // normalized direction of the eye ray
-    int steps;      // number of steps of our ray caster
-    bool outside;   // "true" when the ray is outside the volume
+  vec3 start;     // start point of the ray caster
+  vec3 end;       // end point of the ray caster
+  vec3 delta;     // delta vector of each iteration
+  vec3 direction; // normalized direction of the eye ray
+  int steps;      // number of steps of our ray caster
+  bool outside;   // "true" when the ray is outside the volume
 };
 ```
 
@@ -112,3 +112,17 @@ Resolves the color vector based on the density at the specified 3D point.
 ### float depthAt(vec3 cursor)
 Returns the non-linear depth at the specified 3D point.
 This value can be passed directly to gl_FragDepth.
+
+## Shader playground
+
+<iframe
+  src="https://shader.sethealth.app/"
+  loading="lazy"
+  style={{
+    width:' 100%',
+    height: '650px',
+    border: 0,
+    borderRadius: '4px',
+    overflow: 'hidden'
+  }}
+/>
