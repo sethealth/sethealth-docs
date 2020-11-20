@@ -3,8 +3,8 @@ id: custom-shaders
 title: Custom shaders
 ---
 
-We have already learned how to us the `<set-view-volumetric>` component to render computed tomographies in 3D.
-While this component comes with 3 built-in shaders:
+In the [previous guide](./visualize-tomography), we learned how to use the `<set-view-volumetric>` component to render a [CT (computed tomography)](https://en.wikipedia.org/wiki/CT_scan) in 3D directly in the browser.
+This component comes with 3 rendering modes (or shadeers):
 
 ```html
 <set-view-volumetric shader="max-intensity"></set-view-volumetric>
@@ -15,27 +15,27 @@ While this component comes with 3 built-in shaders:
 - `"shadows"`
 - `"max-intensity"`
 
-Even though this 4 shaders should cover most of the functionality, it's possible to go even more low level
-and write some for special use cases or just experimenting new ways to visualize your data.
+Even though this 4 shaders should cover most of the use cases, it's possible to go low level
+and write a custom one for special use cases or just experimenting new ways of rendering your data. 
 
-Sethealth API makes writing this shaders extremelly easy by abstracting aways all the setup required to get 
-a production ready ray caster.
+Sethealth API makes writing this volumetric shaders extremelly easy by abstracting aways all the setup required to get 
+a production-ready ray caster.
 
 
 ## Anatomy of a volumetric ray caster shader
 
-A computed tomography can be seen as a 3D image, a volume or a tensor in ℝ3. This image is loaded by Sethealth into a 3D texture in the GPU,
+A computed tomography can be seen as a 3D image, a volume or a tensor in ℝ3. The CT is converted and loaded by Sethealth into the GPU,
 then a [volume ray casting](https://en.wikipedia.org/wiki/Volume_ray_casting) algorithm renders a 2D projection into the screen.
 
-Notice that this algoritm needs to "simulate" a light ray going from the camera all the way to end of the volume, and that needs to be computed for **every pixel**
+Notice that this algoritm needs to **"simulate" a light ray going from the camera all the way to end of the volume**, and that needs to be computed for **every pixel**
 of the screen.
 
 Fortunately today's GPUs can run this algorithm efficiently in realtime!
 These programs are called **shaders**, concretely we are going to write a [fragment shader](https://thebookofshaders.com/01/) using the [GLSL language](https://en.wikipedia.org/wiki/OpenGL_Shading_Language).
 
-A fragment shader is small program that runs for **each** pixel in the screen, takes variables (uniforms), textures and the screen position as input and returns a color as output.
+A fragment shader is a small program that runs for **each** pixel, taking variables (uniforms), textures and the screen position as input and returning a color (vec4) as output.
 
-Alright! let's look at the [**max-intensity**](https://en.wikipedia.org/wiki/Maximum_intensity_projection) shader:
+Alright! let's look at the [**max-intensity**](https://en.wikipedia.org/wiki/Maximum_intensity_projection) shader, that comes with Sethealth:
 
 ```cpp {19-30}
 void main() {
@@ -80,10 +80,11 @@ void main() {
 
 
 ## Built-in functions
-Sethealth provides built-in functions to create your own volumetric ray caster on top of the medical data.
+Sethealth provides built-in functions to create your own volumetric ray caster on top of the medical data very easy. Since you can focus in writing the
+logic of you ray caster instead of preparing all the ray directions and matrix transformations. 
 
 ### Ray computeRay()
-Creates a Ray struct, containing all the ray properties required to perform a ray casting.
+Return a Ray struct, containing all the ray properties required to perform a ray casting.
 
 ```cpp
 struct Ray {
@@ -100,22 +101,32 @@ struct Ray {
 Returns the normalized pixel value (density) of our volume at the specified 3D point.
 
 ### vec3 readNormal(vec3 cursor)
-Returns the normalized normal vector at the specified 3D point.
-Normals are computed as the gradient of the volume
+Returns the normalized [normal vector](https://en.wikipedia.org/wiki/Normal_(geometry)) a the surface at the specified point.
+Since it's a volumetric render, there is not a surface strictly speaking, so the normal is the [gradient](https://en.wikipedia.org/wiki/Gradient) of the volume.
 
 ### vec4 readColormap(float density)
-Resolves the color vector for the specified density value in thee [0, 1].
+It uses the provided "colormap" to the component, resolving a volume value to a vector color (RGBA).
 
 ### vec4 readColor(vec3 cursor)
-Resolves the color vector based on the density at the specified 3D point.
+This component uses `readVolume()` and `readColormap()` under the hood to return the resolve the color of
+a specific 3D point using the provided colormap.
 
 ### float depthAt(vec3 cursor)
 Returns the non-linear depth at the specified 3D point.
-This value can be passed directly to gl_FragDepth.
+This value can be passed directly to `gl_FragDepth`. This is used to give our shader depth so it can be integrated with
+normal rasterized geometry.
 
 ## Shader playground
 
+<a
+  className="show-on-mobile"
+  href="https://shader.sethealth.app/"
+>
+  Open Shader Playground
+</a>
+
 <iframe
+  className="hide-on-mobile"
   src="https://shader.sethealth.app/"
   loading="lazy"
   style={{

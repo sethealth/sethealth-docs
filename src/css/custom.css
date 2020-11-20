@@ -64,3 +64,16 @@ img {
 html[data-theme='dark'] .docusaurus-highlight-code-line {
   background-color: rgb(45 48 51);
 }
+
+.show-on-mobile {
+  display: none;
+}
+
+@media screen and (max-width: 700px) {
+  .hide-on-mobile {
+    display: none;
+  }
+  .show-on-mobile {
+    display: block;
+  }
+}
