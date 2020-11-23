@@ -6,6 +6,7 @@ module.exports = {
       "introduction/architecture",
       "introduction/react",
       "introduction/angular",
+      "introduction/public-medical-data",
     ],
     "Dashboard": [
       "dashboard/service-account",

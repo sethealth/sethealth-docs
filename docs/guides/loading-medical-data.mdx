@@ -20,26 +20,64 @@ of the data, for the moment, _sethealth_ supports the following formats:
 
 ## Loading from source
 
-Here's an example of how to load a NRRD file from a URL source:
+Some medical imaging formats such as `nrrd` and `nifty` are self-contained, so a single URL might be enough to load the whole 3D image:
 
+```ts
+import * as sethealth from '@sethealth/core';
 
-```tsx
-import * as sethealth from "@sethealth/core";
-
-const result = await sethealth.med.loadFromSource({
-  source:
-    "https://public1-eu-sethealth.ams3.cdn.digitaloceanspaces.com/public/ankle.nrrd.gz",
+const res = await sethealth.med.loadFromSource({
+  type: 'nrrd' // 'dicom' | 'nifty' | 'png' | 'raw'
+  input: 'https://public.sethealth.app/ankle.nrrd.gz'
 });
-
-if (result.error) {
-  console.error("Something happened while loading", result.error);
-  return;
+if (res.error) {
+  // loading failed
+} else {
+  const handlers = res.value;
+  const medicalData = handlers[0];
+  console.log(medicalData);
 }
-
-const handlers: sethealth.MedHandler[] = result.value;
-const medicalData = handlers[0];
-console.log(medicalData);
 ```
+
+However, in other formats such as `dicom`, a single image (or study) might be spread across multiple files, if this is the case,
+the `input` option can also accept an array of URLs:
+
+```ts
+import * as sethealth from '@sethealth/core';
+
+const res = await sethealth.med.loadFromSource({
+  type: 'dicom'
+  input: [
+    'https://public.sethealth.app/ankle/100.dcm',
+    'https://public.sethealth.app/ankle/101.dcm'
+    'https://public.sethealth.app/ankle/102.dcm'
+    'https://public.sethealth.app/ankle/103.dcm'
+    'https://public.sethealth.app/ankle/104.dcm'
+    'https://public.sethealth.app/ankle/105.dcm'
+    'https://public.sethealth.app/ankle/106.dcm'
+    'https://public.sethealth.app/ankle/107.dcm'
+    'https://public.sethealth.app/ankle/108.dcm'
+    'https://public.sethealth.app/ankle/109.dcm'
+    'https://public.sethealth.app/ankle/110.dcm'
+    'https://public.sethealth.app/ankle/111.dcm'
+    'https://public.sethealth.app/ankle/112.dcm'
+    'https://public.sethealth.app/ankle/113.dcm'
+    'https://public.sethealth.app/ankle/114.dcm'
+    'https://public.sethealth.app/ankle/115.dcm'
+  ]
+});
+if (res.error) {
+  // loading failed
+} else {
+  const handlers = res.value;
+  const medicalData = handlers[0];
+  console.log(medicalData);
+}
+```
+
+:::
+Don't worry about the order of the URLs in the array, Sethealth will sort them correctly under the hood
+:::
+
 
 As you can see, this `loadFromSource()` (and all loading APIs) return a `Result<T>` object. This is because loading
 APIs are likely to fail because of network of filesystem disconnections, so the developers need to take proper action when this errors happen.
