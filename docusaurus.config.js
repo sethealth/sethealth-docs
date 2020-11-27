@@ -7,6 +7,10 @@ module.exports = {
   organizationName: 'sethealth', // Usually your GitHub org/user name.
   projectName: 'sethealth-docs', // Usually your repo name.
   themeConfig: {
+    algolia: {
+      apiKey: '28e368af82efd688eb3cf75259bc796c',
+      indexName: 'set_health',
+    },
     prism: {
       theme: require('prism-react-renderer/themes/github'),
       darkTheme: require('prism-react-renderer/themes/vsDark'),
