@@ -3,6 +3,12 @@ module.exports = {
   tagline: 'Medical toolkit for developers',
   url: 'https://docs.set.health',
   baseUrl: '/',
+  scripts: [{
+    async: true,
+    defer: true,
+    src: "https://stats.set.health/js/index.js",
+    'data-domain': "docs.set.health",
+  }],
   favicon: 'img/favicon.png',
   organizationName: 'sethealth', // Usually your GitHub org/user name.
   projectName: 'sethealth-docs', // Usually your repo name.

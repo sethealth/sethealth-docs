@@ -22,7 +22,7 @@ const WebComponent = ({tag}) => {
             </thead>
             <tbody>
             {cmp.props.map(prop => (
-              <tr>
+              <tr key={prop.name}>
                 <td>{prop.name}</td>
                 <td>{prop.docs}</td>
                 <td><code>{prop.type}</code></td>
@@ -46,7 +46,7 @@ const WebComponent = ({tag}) => {
             </thead>
             <tbody>
             {cmp.events.map(prop => (
-              <tr>
+              <tr key={prop.event}>
                 <td>{prop.event}</td>
                 <td>{prop.docs}</td>
                 <td><code>{prop.type}</code></td>
@@ -64,7 +64,7 @@ const WebComponent = ({tag}) => {
             </thead>
             <tbody>
             {cmp.parts.map(part => (
-              <tr>
+              <tr key={part.name}>
                 <td>{part.name}</td>
                 <td>{part.docs}</td>
               </tr>
