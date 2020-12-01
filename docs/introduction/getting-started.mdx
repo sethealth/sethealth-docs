@@ -74,31 +74,25 @@ values={[
 ]}>
 <TabItem value="core">
 
-```js
+```ts
 import * as sethealth from '@sethealth/core';
 
-async function init() {
-    await sethealth.initialize(
-        "pub_YOURCOMPANY_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-    );
-}
+sethealth.initialize(
+    "pub_YOURCOMPANY_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+);
 ```
 
 </TabItem>
 
 <TabItem value="react">
 
-```tsx
+```ts
 import * as sethealth from '@sethealth/react';
 
-async function init() {
-    await sethealth.initialize(
-        "pub_YOURCOMPANY_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-    );
-    ReactDOM.render(App, root);
-}
-
-init()
+await sethealth.initialize(
+    "pub_YOURCOMPANY_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+);
+ReactDOM.render(App, root);
 ```
 
 </TabItem>
@@ -115,10 +109,10 @@ import { AppComponent } from './app.component';
 @NgModule({
   declarations: [AppComponent],
   imports: [
-      BrowserModule,
-      SethealthModule.forRoot({
-          key: "pub_YOURCOMPANY_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-      })
+    BrowserModule,
+    SethealthModule.forRoot({
+        publicKey: "pub_YOURCOMPANY_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
