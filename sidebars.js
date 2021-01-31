@@ -29,6 +29,7 @@ module.exports = {
       "modules/dataset",
       "modules/storage",
       "modules/utils",
+      "modules/licenses",
     ],
     Components: [
       {
