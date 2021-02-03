@@ -11,7 +11,7 @@ In this case, Sethealth makes it very easy to visualize medical imaging thanks t
 
 Before getting into too much details, it's required to understand **workspaces** in Sethealth.
 
-Sethealth's workspaces are the ones in charge of connecting the medical data with the UI components, and keeping 
+Sethealth's workspaces are the ones in charge of connecting the medical data with the UI components, and keeping
 them syncronized.
 
 Most of the components have a property/attribute called `workspace` where a `WorkspaceState` value should be placed.
@@ -65,10 +65,18 @@ component docs](../components/set-view-slices).
 Here you can see and edit a complete example:
 
 <iframe
-  src="https://stackblitz.com/edit/view-tomography-slices?embed=1&file=App.tsx&hideExplorer=1&hideNavigation=1"
-  width="100%"
-  height="600px"
-></iframe>
+  src="https://codesandbox.io/embed/currying-sound-bdss6?fontsize=14&hidenavigation=1&theme=dark"
+  style={{
+    width:' 100%',
+    height: '500px',
+    border: 0,
+    borderRadius: '4px',
+    overflow: 'hidden'
+  }}
+  loading="lazy"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+/>
 
 
 ## Volumetric rendering of a CT
@@ -79,7 +87,7 @@ Other kind of visualization is the Volumetric 3D rendering of a tomography, in t
 <SetViewVolumetric workspace={workspace}>/>
 ```
 
-As shown above, the same workspace is also used. This component will render a volumetric ray casting of the same CT. Please refer to the 
+As shown above, the same workspace is also used. This component will render a volumetric ray casting of the same CT. Please refer to the
 [docs for further information](../components/set-view-volumetric).
 
 ### Live example
@@ -122,7 +130,15 @@ Say that `<SetPane>` is a generic component for `<SetViewVolumetric>` and `<SetV
 Here you can see and edit a complete example:
 
 <iframe
-  src="https://stackblitz.com/edit/view-tomography-grid?embed=1&file=App.tsx&hideExplorer=1&hideNavigation=1"
-  width="100%"
-  height="600px"
-></iframe>
+  src="https://codesandbox.io/embed/sethealth-react-load-grid-69j08?fontsize=14&hidenavigation=1&theme=dark"
+  style={{
+    width:' 100%',
+    height: '500px',
+    border: 0,
+    borderRadius: '4px',
+    overflow: 'hidden'
+  }}
+  loading="lazy"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+/>
