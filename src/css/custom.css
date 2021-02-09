@@ -69,6 +69,61 @@ html[data-theme='dark'] .docusaurus-highlight-code-line {
   display: none;
 }
 
+.legal {
+  counter-reset: legal-h2;
+}
+
+.legal h2 {
+  counter-reset: legal-p;
+  counter-reset: legal-h3;
+}
+
+.legal h2 a {
+  display: inline;
+}
+
+.legal h2:before {
+  counter-increment: legal-h2;
+  content: counter(legal-h2) ". ";
+}
+
+
+.legal h3 {
+  counter-reset: legal-p;
+}
+
+.legal h3 a {
+  display: inline;
+}
+
+.legal h3:before {
+  counter-increment: legal-h3;
+  content: counter(legal-h2) "." counter(legal-h3) ". ";
+}
+
+
+.legal > p {
+  display: block;
+  position: relative;
+  padding-left: 60px;
+}
+
+.legal > p:before {
+  position: absolute;
+  left: 0;
+  counter-increment: legal-p;
+  content: counter(legal-h2) "." counter(legal-h3) "." counter(legal-p) " ";
+  border-right: 1px solid;
+  width: 50px;
+  margin-right: 10px;
+  float: left;
+  display: block;
+  height: 100%;
+  clear: both;
+  opacity: 0.5;
+  font-size: 0.8em;
+}
+
 @media screen and (max-width: 700px) {
   .hide-on-mobile {
     display: none;

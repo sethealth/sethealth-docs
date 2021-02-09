@@ -29,7 +29,6 @@ module.exports = {
       "modules/dataset",
       "modules/storage",
       "modules/utils",
-      "modules/licenses",
     ],
     Components: [
       {
@@ -80,6 +79,15 @@ module.exports = {
         collapsed: true,
         items: ["components/set-progress-bar", "components/set-icon"],
       },
+    ],
+    Legal: [
+      "legal/licenses",
+      "legal/terms-of-service",
+      {
+        type: "link",
+        label: "Privacy policy",
+        href: "https://set.health/privacy",
+      }
     ],
   },
 };
