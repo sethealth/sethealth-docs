@@ -74,10 +74,8 @@ html[data-theme='dark'] .docusaurus-highlight-code-line {
 }
 
 .legal h2 {
-  counter-reset: legal-p;
-  counter-reset: legal-h3;
+  counter-reset: legal-p legal-h3;
 }
-
 .legal h2 a {
   display: inline;
 }
