@@ -29,13 +29,23 @@ module.exports = {
         alt: 'Sethealth Logo',
         src: 'img/logo-light.svg',
       },
-      
+
       items: [
         {
           to: 'docs/',
           activeBasePath: 'docs',
           label: 'Docs',
           position: 'left',
+        },
+        {
+          href: 'https://github.com/sethealth/sethealth-js',
+          label: 'GitHub',
+          position: 'right',
+        },
+        {
+          href: 'https://discord.gg/PTWJsqSG95',
+          label: 'Discord',
+          position: 'right',
         },
         {
           href: 'https://twitter.com/sethealthtech',
