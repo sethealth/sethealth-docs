@@ -14,7 +14,7 @@ Before getting into too much details, it's required to understand **workspaces**
 Sethealth's workspaces are the ones in charge of connecting the medical data with the UI components, and keeping
 them syncronized.
 
-Most of the components have a property/attribute called `workspace` where a `WorkspaceState` value should be placed.
+Most of the components have a property/attribute called `workspace` where a `Workspace` value should be placed.
 
 Here's the list of components that have a `workspace` property, you can use:
 
@@ -38,7 +38,7 @@ if (result.error) {
   return;
 }
 const medicalData: MedHandler = result.value[0];
-const workspace: WorkspaceState = sethealth.workspace.create(medicalData);
+const workspace: Workspace = sethealth.workspace.create(medicalData);
 console.log('This workspace represent my medical data', workspace);
 ```
 

@@ -18,7 +18,7 @@ Once you generate a token, it must be passed to the SDK using the `auth` module.
 await sethealth.auth.setAccessToken(token);
 ```
 
-Notice that access tokens are short-lived, meaning it expires few hours after its creation, so they must 
+Notice that access tokens are short-lived, meaning it expires few hours after its creation, so they must
 be generated on-demand in your own backend.
 
 [Learn how to create access tokens from a service account](../dashboard/service-account).
@@ -27,7 +27,7 @@ be generated on-demand in your own backend.
 ## Uploading data with `ensureSources()`
 
 This method can be called from the `workspace` API and it uploads data only when strictly necesary. This method returns
-a `SerializableWorkspace` as under the hood calls to `workspace.serialize()`. 
+a `SerializableWorkspace` as under the hood calls to `workspace.serialize()`.
 
 ```tsx
 import * as sethealth from "@sethealth/core";
@@ -37,13 +37,13 @@ const json = await sethealth.workspace.ensureSources({
 });
 ```
 
-This method can be called from `med` or `geometry` too, thus avoiding creating a `WorkspaceState` object.
+This method can be called from `med` or `geometry` too, thus avoiding creating a `Workspace` object.
 Under the hood, calling this method form `workspace` uses `med.ensureSources()` and `geometry.ensureSources()`.
 If any `MedHandler` or `Geometry` have a source yet, the method will skip.
 
-## Serializing a WorkspaceState with `serialize()`
+## Serializing a Workspace with `serialize()`
 
-The `workspace.serialize()` returns a `SerializableWorkspace` given a `WorkspaceState`. A `SerializableWorkspace` is a
+The `workspace.serialize()` returns a `SerializableWorkspace` given a `Workspace`. A `SerializableWorkspace` is a
 JSON-safe serializable object created in order to share a workspace or store it for persistence.
 
 ```tsx
@@ -55,9 +55,9 @@ const json = await sethealth.workspace.serialize({
 });
 ```
 
-The field `medSource` is not required in order serialize a `WorkspaceState`. If it is not used, the `MedHandler` contained by the
-`WorkspaceState` must have a `MedSource` (it can be achive with the `ensureSources()` method). Althought, if you want to serialize
-a `WorkspaceState` without a `MedSource` is possible too, specifying a null value in `opts.medSource` that will overwrite the actual
+The field `medSource` is not required in order serialize a `Workspace`. If it is not used, the `MedHandler` contained by the
+`Workspace` must have a `MedSource` (it can be achive with the `ensureSources()` method). Althought, if you want to serialize
+a `Workspace` without a `MedSource` is possible too, specifying a null value in `opts.medSource` that will overwrite the actual
 `MedHandler` value. For further information [check out the docs](../modules/workspace).
 
 
@@ -89,12 +89,12 @@ const json = JSON.parse(jsonstring) as SerializableWorkspace;
 ```
 
 With the `SerializableWorkspace` now it is possible to create again the same `workspace` as before as it contains all the
-sources needed to download MedHandler and Geometries attached. To see how [check out to the next fragment](../guides/sharing-data#creating-a-workspacestate-from-a-serializableworkspace)
+sources needed to download MedHandler and Geometries attached. To see how [check out to the next fragment](../guides/sharing-data#creating-a-Workspace-from-a-serializableworkspace)
 
 
-## Creating a WorkspaceState from a SerializableWorkspace
+## Creating a Workspace from a SerializableWorkspace
 
-Now let's see how to use a `SerializableWorkspace` to create the `WorkspaceState` again.
+Now let's see how to use a `SerializableWorkspace` to create the `Workspace` again.
 
 ```tsx
 import * as sethealth from "@sethealth/core";
@@ -106,5 +106,5 @@ if (result.error) {
 const workspace = result.value;
 ```
 
-First a `MedHandler` should be created as will be used to create the workspace. Then the `WorkspaceState` can be restored by using `workspace.create()`
+First a `MedHandler` should be created as will be used to create the workspace. Then the `Workspace` can be restored by using `workspace.create()`
 passing the `MedHandler` and the previously serialized `SerializableWorkspace`. For further information [check out the docs](../modules/workspace).

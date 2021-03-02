@@ -15,7 +15,7 @@ cd my-react-app
 ```
 
 While Sethealth can be used without typescript, we strongly recomend using it, since most of our API docs are described
-as Typescript interfaces. 
+as Typescript interfaces.
 
 ### 2. Install **@sethealth/react**
 
@@ -70,7 +70,7 @@ import { med, SetProgressBar, SetViewVolumetric } from '@sethealth/react';
 const MEDICAL_IMAGE = "https://public1-eu-sethealth.ams3.cdn.digitaloceanspaces.com/public/ankle.nrrd.gz";
 
 function App() {
-  const [workspace, setWorkspace] = useState<sethealth.WorkspaceState>();
+  const [workspace, setWorkspace] = useState<sethealth.Workspace>();
   const [error, setError] = useState<Error>();
   const [loading, setLoading] = useState<number>();
 
@@ -133,7 +133,7 @@ You can find the React app on this repo, ready to fork:
 :::
 
 
-## Live example 
+## Live example
 
 <iframe
   src="https://codesandbox.io/embed/rough-worker-qkrbw?fontsize=14&hidenavigation=1&theme=dark&view=preview"
