@@ -1,0 +1,307 @@
+---
+id: fhir
+sidebar_label: FHIR
+title: FHIR Module
+---
+
+
+import API from '@site/src/components/API';
+
+```js
+import * as sethealth from '@sethealth/core';
+
+sethealth.fhir.[...]
+```
+
+## Use cases
+
+### Connect with a FHIR server
+
+You can use `sethealth.fhir.createClient` to easily connect with a remote FHIR if the access is open, or you know the credentials.
+
+```ts
+import * as sethealth from '@sethealth/core';
+
+const client = await sethealth.fhir.createClient({
+  baseURL: "https://api.logicahealth.org/Sethealth/open",
+  bearer: "MY_TOKEN"
+});
+
+const patients = await client.resources.Patient.getAll();
+for await (const patient of patients.values()) {
+  console.log(patient);
+}
+```
+
+The code above connects with the FHIR endpoint `https://api.logicahealth.org/Sethealth/open` which requests no authentication, and then requests all the patients.
+
+
+## API reference
+
+#### `fhir.createClient(options: FHIRConnectOptions): Promise<FHIR>`
+
+Creates a FHIR client that connects with the FHIR server specified in the options object.
+
+```ts
+export interface FHIRConnectOptions {
+  /**
+   * BaseURL of the FHIR server to connect.
+   */
+  baseURL: string;
+
+  /**
+   * Basic HTTP authentication (if required)
+   */
+  basic?: {
+    user: string;
+    password: string;
+  };
+
+  /**
+   * Bearer HTTP authentication (if required)
+   */
+  bearer?: string;
+
+  /**
+   * Default credentials passed to fetch().
+   * Can be either: `"include" | "omit" | "same-origin"`
+   */
+  credentials?: RequestCredentials;
+
+  /**
+   * Extra headers to append to every request performed by the server
+   */
+  headers?: { [key: string]: string } | Headers;
+
+  /**
+   * Allows to intercept the fetch HTTP calls, defaults to `window.fetch`.
+   */
+  fetch?: (input: RequestInfo, init?: RequestInit) => Promise<Response>;
+}
+```
+
+#### `FHIRClient`
+
+Once you create a FHIR client with `createClient()` you get a `FHIR` instance that allows you to query the FHIR server easily and strongly typed thanks to Typescript.
+
+```ts
+export interface FHIRClient {
+  conformance(): AsyncResult<any>;
+  document(): AsyncResult<fhir.DocumentManifest>;
+  transaction(): AsyncResult<any>;
+  history(): AsyncResult<any>;
+  resource: FHIRResource;
+}
+```
+
+Let's focus in the `resource` property of our client, this allows to query all the FHIR resources.
+
+```ts
+const client = await sethealth.fhir.createClient({
+  baseURL: "https://api.logicahealth.org/Sethealth/open",
+  bearer: "MY_TOKEN"
+});
+
+// Read resource "Account" ID=1234
+const {value} = await client.resource.Account.read("1234");
+console.log(value);
+```
+
+ - `DomainResource`
+ - `Account`
+ - `ActivityDefinition`
+ - `AdverseEvent`
+ - `AllergyIntolerance`
+ - `Appointment`
+ - `AppointmentResponse`
+ - `AuditEvent`
+ - `Basic`
+ - `BodySite`
+ - `CapabilityStatement`
+ - `CarePlan`
+ - `CareTeam`
+ - `ChargeItem`
+ - `Claim`
+ - `ClaimResponse`
+ - `ClinicalImpression`
+ - `CodeSystem`
+ - `Communication`
+ - `CommunicationRequest`
+ - `CompartmentDefinition`
+ - `Composition`
+ - `ConceptMap`
+ - `Condition`
+ - `Consent`
+ - `Contract`
+ - `Coverage`
+ - `DataElement`
+ - `DetectedIssue`
+ - `Device`
+ - `DeviceComponent`
+ - `DeviceMetric`
+ - `DeviceRequest`
+ - `DeviceUseStatement`
+ - `DiagnosticReport`
+ - `DocumentManifest`
+ - `DocumentReference`
+ - `EligibilityRequest`
+ - `EligibilityResponse`
+ - `Encounter`
+ - `Endpoint`
+ - `EnrollmentRequest`
+ - `EnrollmentResponse`
+ - `EpisodeOfCare`
+ - `ExpansionProfile`
+ - `ExplanationOfBenefit`
+ - `FamilyMemberHistory`
+ - `Flag`
+ - `Goal`
+ - `GraphDefinition`
+ - `Group`
+ - `GuidanceResponse`
+ - `HealthcareService`
+ - `ImagingManifest`
+ - `ImagingStudy`
+ - `Immunization`
+ - `ImmunizationRecommendation`
+ - `ImplementationGuide`
+ - `Library`
+ - `Linkage`
+ - `List`
+ - `Location`
+ - `Measure`
+ - `MeasureReport`
+ - `Media`
+ - `Medication`
+ - `MedicationAdministration`
+ - `MedicationDispense`
+ - `MedicationRequest`
+ - `MedicationStatement`
+ - `MessageDefinition`
+ - `MessageHeader`
+ - `NamingSystem`
+ - `NutritionOrder`
+ - `Observation`
+ - `OperationDefinition`
+ - `OperationOutcome`
+ - `Organization`
+ - `Patient`
+ - `PaymentNotice`
+ - `PaymentReconciliation`
+ - `Person`
+ - `PlanDefinition`
+ - `Practitioner`
+ - `PractitionerRole`
+ - `Procedure`
+ - `ProcedureRequest`
+ - `ProcessRequest`
+ - `ProcessResponse`
+ - `Provenance`
+ - `Questionnaire`
+ - `QuestionnaireResponse`
+ - `ReferralRequest`
+ - `RelatedPerson`
+ - `RequestGroup`
+ - `ResearchStudy`
+ - `ResearchSubject`
+ - `RiskAssessment`
+ - `Schedule`
+ - `SearchParameter`
+ - `Sequence`
+ - `ServiceDefinition`
+ - `Slot`
+ - `Specimen`
+ - `StructureDefinition`
+ - `StructureMap`
+ - `Subscription`
+ - `Substance`
+ - `SupplyDelivery`
+ - `SupplyRequest`
+ - `Task`
+ - `TestReport`
+ - `TestScript`
+ - `ValueSet`
+ - `VisionPrescription`
+ - `Binary`
+ - `Bundle`
+ - `Parameters`
+
+There several "actions" that can be performed for every "resource":
+
+```ts
+export interface FHIREntityHandler<T> {
+  read(id: string, version?: string): AsyncResult<T>;
+  update(id: string, data: Partial<T>): AsyncResult<void>;
+  patch(id: string, data: Partial<T>): AsyncResult<void>;
+  delete(id: string): AsyncResult<void>;
+  history(id?: string): AsyncResult<void>;
+  search(params?: FHIRSearch<T>): AsyncResult<T[]>;
+  readAll(): AsyncResult<T[]>;
+  create(data: T): AsyncResult<T>;
+  validate(): AsyncResult<void>;
+  from(compartment: FHIRCompartment, id: string): AsyncResult<T[]>;
+
+  conditionalDelete(params: FHIRSearch<T>): AsyncResult<T>;
+  conditionalUpdate(params: FHIRSearch<T>, data: Partial<T>): AsyncResult<T>;
+
+  meta: {
+    add(id: string, data: fhir.Meta): AsyncResult<fhir.Meta>;
+    delete(id: string, data: fhir.Meta): AsyncResult<fhir.Meta>;
+    read(id: string): AsyncResult<fhir.Meta>;
+  };
+}
+```
+
+Let's explore some of them:
+```ts
+// Create new Account
+await client.Account.create({
+  name: "Hello"
+});
+
+// Read Patient id=321
+const patient = await client.Patient.read("321");
+
+// Get all diagnostic reports
+const diagnostics = await client.DiagnosticReport.getAll();
+for await (const diagnostic of diagnostics.value.values()) {
+  console.log(diagnostic);
+}
+
+// Get all medication requests for the patient 1234
+const medications = await client.MedicationRequest.from("Patient", "1234")
+for await (const medication of medications.value.values()) {
+  console.log(medication);
+}
+
+// Complex search request
+// We will look into the search query syntax later
+const patients = await client.Patient.search({
+  name: {
+    "$or": ["Adam", {$exact: "Adam Smith"}]
+  }
+});
+for await (const patient of patients.value.values()) {
+  console.log(patient);
+}
+```
+
+The search syntax adopts the mongodb-like query syntax ([see](https://docs.mongodb.com/manual/tutorial/query-documents/)).
+
+```ts
+{name: 'maud'}
+
+{name: {$exact: 'maud'}}
+
+{name: {$or: ['maud','dave']}}
+
+{name: {$and: ['maud',{$exact: 'dave'}]}}
+
+{birthDate: {$gt: '1970', $lte: '1980'}}
+
+{subject: {$type: 'Patient', name: 'maud', birthDate: {$gt: '1970'}}}
+
+{subject: {
+  name: {$exact: 'maud'}
+}}
+```

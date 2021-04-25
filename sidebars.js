@@ -28,6 +28,7 @@ module.exports = {
       "modules/workspace",
       "modules/dataset",
       "modules/storage",
+      "modules/fhir",
       "modules/utils",
     ],
     Components: [

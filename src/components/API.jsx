@@ -9,7 +9,7 @@ const API = ({module}) => {
     .filter(fn => fn.flags.isExported && fn.kindString === 'Function')
     .map(fn => (
       <>
-        <h3 class="code-h3">
+        <h4 class="code-h4">
           <a
             aria-hidden="true"
             tabindex="-1"
@@ -26,7 +26,7 @@ const API = ({module}) => {
           >
             #
           </a>
-        </h3>
+        </h4>
         <p class="api-docs">
           {fn.comment?.shortText}
         </p>
